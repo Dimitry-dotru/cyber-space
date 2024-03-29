@@ -1,5 +1,4 @@
 "use client"
-
 import React from 'react';
 
 interface userObj {
@@ -38,15 +37,16 @@ export default function Home() {
       window.history.replaceState({}, document.title, urlWithoutSteamId);
       window.localStorage.setItem("steamId", steamIdFromUrl);
       setSteamId(steamIdFromUrl);
+      console.log(steamIdFromUrl);
 
       const steamKey = "BDE51B80D4D4E0257B60610C0B3FE6F6";
       fetch(
-        `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamKey}&steamids=${steamIdFromUrl}`
+        `http://localhost:7069/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${steamKey}&steamids=${steamIdFromUrl}`
       )
         .then((d) => d.json())
         .then((d) => {
-          setSteamUser(d.response.players[0]);
-          console.log(d.response.players[0]);
+          setSteamUser(d.response.players[0] as userObj);
+          setSteamId(d.response.players[0]);
         });
     }
   }, []);
@@ -54,7 +54,7 @@ export default function Home() {
   return (
     <main>
       <div className="testing-block">
-        {!steamId && <>
+        {!steamUser && <>
           <h1>Steam auth</h1>
           <a href="http://localhost:7069/api/auth/steam" rel="noopener noreferrer" className="btn-secondary">Login with steam</a>
         </>}
