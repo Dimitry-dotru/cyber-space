@@ -33,6 +33,9 @@ main {
   min-height: 200dvh;
   border: 1px solid var(--primary-color);
   font-size: 36px;
+  gap: 50px;
+  display: flex;
+  align-items: start;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -87,4 +90,10 @@ button, a {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }

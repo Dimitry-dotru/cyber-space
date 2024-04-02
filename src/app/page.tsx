@@ -20,50 +20,48 @@ interface userObj {
   timecreated: number;
 }
 
+const getUser = (sessionID: string, setSteamUser: (arg: userObj | null) => void) => {
+  fetch("http://localhost:7069" + "/?sessionID=" + sessionID).then(d => {
+    if (!d.ok) {
+      throw new Error("User not found!");
+    }
+    return d.json();
+  })
+    .then((d: userObj) => {
+      setSteamUser(d);
+    }).catch((reason) => {
+      console.log(reason);
+    })
+}
+
 export default function Home() {
 
-  const [steamId, setSteamId] = React.useState<string | null>(null);
   const [steamUser, setSteamUser] = React.useState<userObj | null>(null);
 
   React.useEffect(() => {
-    // Получаем SteamID из адресной строки
     const params = new URLSearchParams(window.location.search);
-    const steamIdFromUrl = params.get("steamId");
+    const sessionID = params.get("sessionID") ? params.get("sessionID") : window.localStorage.getItem("sessionID");
 
-    // Если SteamID есть в адресной строке, сохраняем его в состоянии и убираем из адресной строки
-    if (steamIdFromUrl) {
-      // setSteamId(steamIdFromUrl);
-      const urlWithoutSteamId = window.location.href.split("?")[0];
-      window.history.replaceState({}, document.title, urlWithoutSteamId);
-      window.localStorage.setItem("steamId", steamIdFromUrl);
-      setSteamId(steamIdFromUrl);
-      console.log(steamIdFromUrl);
+    if (!sessionID) return;
+    const url = window.location.href.split("?")[0];
+    window.history.replaceState({}, document.title, url);
 
-      const steamKey = "BDE51B80D4D4E0257B60610C0B3FE6F6";
-      fetch(
-        `http://localhost:7069/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${steamKey}&steamids=${steamIdFromUrl}`
-      )
-        .then((d) => d.json())
-        .then((d) => {
-          setSteamUser(d.response.players[0] as userObj);
-          setSteamId(d.response.players[0]);
-        });
-    }
+    getUser(sessionID, setSteamUser);
+
+    window.localStorage.setItem("sessionID", sessionID);
+    
   }, []);
 
   return (
     <main>
       <div className="testing-block">
-        {!steamUser && <>
-          <h1>Steam auth</h1>
-          <a href="http://localhost:7069/api/auth/steam" rel="noopener noreferrer" className="btn-secondary">Login with steam</a>
-        </>}
+        {!steamUser && <a className="btn-secondary" href="http://localhost:7069/api/auth/steam">Login</a>}
 
-        {steamUser && <>
-          <h3 className="login-header">
-            Welcome <span>{steamUser.personaname} <img width={50} height={50} src={steamUser.avatarfull} /></span>
-          </h3>
-        </>}
+        {steamUser && <div className="user-profile">
+          <img src={steamUser.avatarmedium} alt="steam profile photo" />
+          <h3>{steamUser.personaname}</h3>
+        </div>}
+
       </div>
     </main>
   );
