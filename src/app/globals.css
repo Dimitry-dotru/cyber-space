@@ -92,8 +92,18 @@ button, a {
   gap: 5px;
 }
 
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
 .user-profile {
   display: flex;
   align-items: center;
   gap: 20px;
+}
+
+.user-profile img {
+  border-radius: 5px;
 }
