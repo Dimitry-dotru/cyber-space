@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    domains: ["media.steampowered.com"],
+  },
+};
 
 export default nextConfig;
