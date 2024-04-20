@@ -21,7 +21,7 @@
     rgba(24, 27, 52, 1) 20%,
     rgba(49, 32, 64, 1) 100%
   );
-  --body-bg-image: url("../../public/img/user-shell/bg-pattern.png");
+  --body-bg-image: none;
 }
 
 main {
@@ -157,6 +157,7 @@ a {
   border-radius: 5px;
 }
 .header {
+  position: relative;
   margin-left: 50px;
   margin-right: 50px;
   display: flex;

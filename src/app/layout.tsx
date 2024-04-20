@@ -1,19 +1,22 @@
-import type { Metadata } from "next";
+"use client";
+
 import { Inter } from "next/font/google";
 import "./globals.css";
+import React from "react";
+import bgImage from "@/public/img/user-shell/bg-pattern.png";
 
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Cyber Space",
-  description: "An online website for gamers!",
-};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  React.useEffect(() => {
+    // с этим чуть позже разберусь
+    // document.documentElement.style.setProperty("--body-bg-image", bgImage.src);
+  }, []);
 
   return (
     <html lang="en">

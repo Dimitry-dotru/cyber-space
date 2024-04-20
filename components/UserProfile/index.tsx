@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import userLogo from "../../public/img/icon.png";
+// import userLogo from "../../public/img/icon.png";
+import userLogo from "@/public/img/icon.png";
 import "./style.css";
 
 

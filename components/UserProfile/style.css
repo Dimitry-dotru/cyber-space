@@ -1,19 +1,14 @@
 .user-profile {
-  position: relative;
-  margin-right: 17px;
+  /* position: relative; */
   user-select: none;
-}
-
-.user-profile {
-  border: 1px solid var(--primary-color);
-  border-radius: 50%;
+  padding-right: 25px;
 }
 
 .user-dropdown {
   position: absolute;
-  top: calc(100% + 5px);
-  left: 50%;
-  transform: translateX(-50%);
+  right: -1px;
+  top: calc(100% - 15px);
+  /* transform: translateX(-50%); */
   max-height: 0;
   transition: 0.3s;
   overflow: hidden;
@@ -69,7 +64,10 @@
 }
 
 .user-logo-container {
+  position: relative;
+  border: 1px solid var(--primary-color);
   display: flex;
   align-items: center;
   gap: 5px;
+  border-radius: 50%;
 }
