@@ -1,6 +1,8 @@
 // pages/index.tsx
+"use client"
 
-import React, { useState }  from 'react';
+import UserProfile from '../../../components/UserProfile';
+import React, { useState } from 'react';
 import Image from "next/image";
 import Link from 'next/link';
 import logo from "../../../public/img/logo.png";
@@ -10,24 +12,25 @@ import news from "../../../public/img/news.svg";
 
 
 const Page = () => {
-return (
-    <header className='header'>
-        <div >
-        <Image src={logo} alt="Logo"></Image>
-        </div>
-        <div className='dota'>
-        <div className='navigat'>
-            <Image src={news} alt="Logo"></Image>
-            <nav>News</nav>
+    return (
+        <header className='header'>
+            <div >
+                <Image src={logo} alt="Logo"></Image>
             </div>
+            <div className='dota'>
                 <div className='navigat'>
-                <Image src={prof} alt="Logo"></Image>
-                <nav>Profile</nav>
+                    {/* пример использования material-symbols */}
+                    <span className="material-symbols-outlined">feed</span>
+                    <nav>News</nav>
                 </div>
-                    <Image src={icon} alt="Logo"></Image>
-        </div>
-    </header>
-);
+                <div className='navigat'>
+                    <Image src={prof} alt="Logo"></Image>
+                    <nav>Profile</nav>
+                </div>
+                <UserProfile />
+            </div>
+        </header>
+    );
 };
 
 export default Page;
