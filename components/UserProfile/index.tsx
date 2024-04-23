@@ -3,7 +3,7 @@ import Image from "next/image";
 // import userLogo from "../../public/img/icon.png";
 import userLogo from "@/public/img/icon.png";
 import "./style.css";
-
+const backendAddress = "http://localhost:7069";
 
 const UserProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,10 +20,10 @@ const UserProfile = () => {
 
     <div className={`user-dropdown ${isOpen ? "open" : ""}`}>
       <ul className="user-dropdown-container">
-        <li><span className="material-symbols-outlined">account_circle</span>Profile</li>
-        <li><span className="material-symbols-outlined">settings</span>Settings</li>
+       <a href="/"> <li><span className="material-symbols-outlined">account_circle</span>Profile</li></a>
+        <a href="/"><li><span className="material-symbols-outlined">settings</span>Settings</li></a>
         <hr className="separate-line" />
-        <li><span className="material-symbols-outlined">move_item</span>Log out</li>
+        <a href={`${backendAddress}/api/auth/steam`}><li><span className="material-symbols-outlined">move_item</span>Log in</li></a>
       </ul>
     </div>
   </div>;

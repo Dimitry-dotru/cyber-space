@@ -183,7 +183,7 @@ a {
   align-items: center;
   gap: 40px;
 }
-.navigat {
+.navigate {
   color: var(--White-half, #d9d9d9);
   font-family: Inter;
   font-size: 24px;
@@ -193,7 +193,7 @@ a {
   display: flex;
   align-items: center;
 }
-.dota {
+.container-navigate {
   display: flex;
   gap: 40px;
   display: flex;

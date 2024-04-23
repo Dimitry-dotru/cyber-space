@@ -157,7 +157,7 @@ export default function Home() {
   return (
     <main>
       <div className="testing-block">
-        {!steamUser && <a className="btn-secondary" href={`${backendAddress}/api/auth/steam`}>Login</a>}
+        {!steamUser && <a className="btn-secondary" href={`${backendAddress}/api/auth/steam`}>Log in</a>}
 
         {steamUser && <>
           <div className="user-info">
@@ -165,7 +165,7 @@ export default function Home() {
               <img src={steamUser.avatarmedium} alt="steam profile photo" />
               <h3>{steamUser.personaname}</h3>
             </div>
-            <button className="btn-secondary" onClick={() => logoutHandler(setSteamUser)}>Logout</button>
+            <button className="btn-secondary" onClick={() => logoutHandler(setSteamUser)}>Log out</button>
 
           </div>
           <div className="lists">
