@@ -10,9 +10,11 @@ import icon from "../../../public/img/icon.png";
 import prof from "../../../public/img/prof.svg";
 import news from "../../../public/img/news.svg";
 
+import FriendsList from '@/components/FriendsList';
+
 
 const Page = () => {
-    return (
+    return <>
         <header className='header'>
             <div >
                 <Image src={logo} alt="Logo"></Image>
@@ -30,7 +32,8 @@ const Page = () => {
                 <UserProfile />
             </div>
         </header>
-    );
+        <FriendsList steamid="/" />
+    </>;
 };
 
 export default Page;
