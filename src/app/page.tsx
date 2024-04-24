@@ -3,7 +3,9 @@ import React from 'react';
 import Image from 'next/image';
 import imgErrorPic from "../../public/img/error-img/unknown_game.jpg";
 
+// move it to .env.local
 const apiKey = "BDE51B80D4D4E0257B60610C0B3FE6F6";
+const backendAddress = "http://localhost:7069";
 
 interface userObj {
   avatar: string;
@@ -43,7 +45,7 @@ interface gameObj {
 }
 
 const getUser = (sessionID: string, setSteamUser?: (arg: userObj | null) => void) => {
-  fetch("http://localhost:7069" + "/?sessionID=" + sessionID).then(d => {
+  fetch(backendAddress + "/?sessionID=" + sessionID).then(d => {
     if (!d.ok) {
       setSteamUser ? setSteamUser(null) : null;
       throw new Error("User not found!");
@@ -73,7 +75,7 @@ const logoutHandler = (setSteamUser: (arg: userObj | null) => void) => {
 }
 
 const getUsers = (steamids: string[], setUsers: (arg: userObj[] | null) => void) => {
-  fetch(`http://localhost:7069/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamids.join(",")}`).then(d => d.json())
+  fetch(`${backendAddress}/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamids.join(",")}`).then(d => d.json())
     .then(d => {
       const usersObj = d.response.players as userObj[];
       setUsers(usersObj);
@@ -86,7 +88,7 @@ const FriendsList: React.FC<{ steamUser: userObj }> = ({
   const [userFriends, setUserFriends] = React.useState<userObj[] | null>(null);
 
   React.useEffect(() => {
-    fetch(`http://localhost:7069/steam/ISteamUser/GetFriendList/v0001/?key=${apiKey}&steamid=${steamUser.steamid}&relationship=friend`)
+    fetch(`${backendAddress}/steam/ISteamUser/GetFriendList/v0001/?key=${apiKey}&steamid=${steamUser.steamid}&relationship=friend`)
       .then(d => d.json())
       .then(d => {
         const friendsList = d.friendslist.friends as friendObj[];
@@ -112,7 +114,7 @@ const GamesList: React.FC<{ steamUser: userObj }> = ({
   const [userGames, setUserGames] = React.useState<gameObj[] | null>(null);
 
   React.useEffect(() => {
-    fetch(`http://localhost:7069/steam/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${apiKey}&steamid=${steamUser.steamid}&format=json`)
+    fetch(`${backendAddress}/steam/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${apiKey}&steamid=${steamUser.steamid}&format=json`)
       .then(d => d.json())
       .then(d => {
         const recentlyGamesList = d.response.games as gameObj[];
@@ -155,7 +157,7 @@ export default function Home() {
   return (
     <main>
       <div className="testing-block">
-        {!steamUser && <a className="btn-secondary" href="http://localhost:7069/api/auth/steam">Login</a>}
+        {!steamUser && <a className="btn-secondary" href={`${backendAddress}/api/auth/steam`}>Log in</a>}
 
         {steamUser && <>
           <div className="user-info">
@@ -163,7 +165,7 @@ export default function Home() {
               <img src={steamUser.avatarmedium} alt="steam profile photo" />
               <h3>{steamUser.personaname}</h3>
             </div>
-            <button className="btn-secondary" onClick={() => logoutHandler(setSteamUser)}>Logout</button>
+            <button className="btn-secondary" onClick={() => logoutHandler(setSteamUser)}>Log out</button>
 
           </div>
           <div className="lists">
