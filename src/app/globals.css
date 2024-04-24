@@ -71,10 +71,9 @@ a {
 }
 
 .testing-block {
-  width: 100%;
-  max-width: 1140px;
-  margin: 0 auto;
+  width: calc(100% - 100px);
   padding: 25px;
+  margin: 0 auto;
   background-color: var(--main-color-opacity);
   border-radius: 10px;
   min-height: calc(100dvh - 100px);
@@ -175,9 +174,6 @@ a {
   color: var(--White-half, #d9d9d9);
   font-family: Inter;
   font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -187,11 +183,9 @@ a {
   color: var(--White-half, #d9d9d9);
   font-family: Inter;
   font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
   display: flex;
   align-items: center;
+  gap: 5px;
 }
 .container-navigate {
   display: flex;

@@ -7,6 +7,7 @@ import { userObj, friendObj, gameObj } from '../utils/types/steamTypes';
 import { getUser, getUsers } from '../utils/functions/steamRequests';
 import { logoutHandler, getSessionId } from '../utils/functions/authorization';
 
+import Header from '@/components/Header';
 
 const FriendsList: React.FC<{ steamUser: userObj }> = ({
   steamUser
@@ -81,28 +82,31 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
-      <div className="testing-block">
-        {!steamUser && <a className="btn-secondary" href={`${process.env.backendAddress}/api/auth/steam`}>Log in</a>}
+    <>
+      <Header steamUser={steamUser} setSteamUser={setSteamUser} isAuthorised={!!steamUser} />
+      <main>
+        <div className="testing-block">
+          {/* {!steamUser && <a className="btn-secondary" href={`${process.env.backendAddress}/api/auth/steam`}>Log in</a>} */}
 
-        {steamUser && <>
+          {steamUser && <>
 
-          <div className="user-info">
-            <div className="user-profile">
-              <img src={steamUser.avatarmedium} alt="steam profile photo" />
-              <h3>{steamUser.personaname}</h3>
+            {/* <div className="user-info">
+              <div className="user-profile">
+                <img src={steamUser.avatarmedium} alt="steam profile photo" />
+                <h3>{steamUser.personaname}</h3>
+              </div>
+              <button className="btn-secondary" onClick={() => logoutHandler(setSteamUser)}>Log out</button>
+
+            </div> */}
+            <div className="lists">
+              <FriendsList steamUser={steamUser} />
+              <GamesList steamUser={steamUser} />
             </div>
-            <button className="btn-secondary" onClick={() => logoutHandler(setSteamUser)}>Log out</button>
 
-          </div>
-          <div className="lists">
-            <FriendsList steamUser={steamUser} />
-            <GamesList steamUser={steamUser} />
-          </div>
+          </>}
+        </div>
 
-        </>}
-      </div>
-
-    </main>
+      </main>
+    </>
   );
 }
