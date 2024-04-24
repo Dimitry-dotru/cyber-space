@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 // import userLogo from "../../public/img/icon.png";
 import logo from "../../public/img/logo.png";
-import UserProfile from "../../components/UserProfile";
+import UserProfile from "@/components/UserProfile";
 
-const Header = () => {
+const Header: React.FC<{isAuthorised: boolean}> = ({
+  isAuthorised
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => {
