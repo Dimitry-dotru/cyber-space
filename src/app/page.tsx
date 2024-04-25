@@ -72,7 +72,12 @@ export default function Home() {
       setSteamUser: (arg: userObj | null) => void
     ) => {
       const data = await getUser(sessionID);
+      console.log(data);
       setSteamUser(data);
+      if (!data) {
+        window.localStorage.clear(); 
+        return;
+      }
       window.localStorage.setItem("sessionID", sessionID);
     }
 
@@ -83,7 +88,7 @@ export default function Home() {
 
   return (
     <>
-      <Header steamUser={steamUser} setSteamUser={setSteamUser} isAuthorised={!!steamUser} />
+      <Header steamUser={steamUser} setSteamUser={setSteamUser} />
       <main>
         <div className="testing-block">
           {/* {!steamUser && <a className="btn-secondary" href={`${process.env.backendAddress}/api/auth/steam`}>Log in</a>} */}

@@ -8,12 +8,10 @@ import UserProfile from "@/components/UserProfile";
 import { userObj } from "@/src/utils/types/steamTypes";
 
 interface HeaderProps {
-  isAuthorised: boolean;
   setSteamUser: (arg: userObj | null) => void
   steamUser: null | userObj;
 }
 const Header: React.FC<HeaderProps> = ({
-  isAuthorised,
   setSteamUser,
   steamUser
 }) => {
