@@ -1,55 +1,88 @@
 import React from "react";
+import { v4 as uuid4 } from "uuid";
 
-const apiKey = "BDE51B80D4D4E0257B60610C0B3FE6F6";
-const backendAddress = "http://localhost:7069";
+import "./style.css";
+
+import { friendObj, userObj } from "@/src/utils/types/steamTypes";
+
+const apiKey = process.env.apiKey;
+const backendAddress = process.env.backendAddress;
 
 interface FriendsListProps {
-  steamid: string;
+  steamUser: userObj | null;
 }
 
-interface friendObj {
-  friend_since: number;
-  relationship: string;
-  steamid: string;
-}
-
-async function getFriendsList(steamid: string) {
+async function getFriendsList(steamid: string, setFriendList: (arg: null | userObj[]) => void) {
   const data = await fetch(`${backendAddress}/steam/ISteamUser/GetFriendList/v0001/?key=${apiKey}&steamid=${steamid}&relationship=friend`);
 
-  const friendList = await data.json();
+  const friendList = (await data.json()).friendslist.friends as friendObj[];
+  const pairsAmnt = Math.ceil(friendList.length / 100);
+  const allUsers: userObj[] = [];
 
-  
-  
-  // .then(d => d.json())
-  // .then(d => {
-  //   const friendList = d.friendslist.friends as friendObj[];
-  //   const steamids: string[] = [];
-  //   friendList.forEach((el, idx) => {
-  //     steamids.push(el.steamid);
-  //   })
+  for (let i = 0; i < pairsAmnt; i++) {
+    const steamids = friendList.slice(i * 100, (i * 100) + 100).map((el) => el.steamid);
 
-  // })
-  // fetch(`${backendAddress}/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamids.join(",")}`)
-  // .then(d => d.json())
-  // .then(d => {
-  //   console.log(d);
-  // });
+    const data = await fetch(`${backendAddress}/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamids.join(",")}`);
+
+    const usersArray = (await data.json()).response.players as userObj[];
+    usersArray.forEach(el => {
+      allUsers.push(el);
+    })
+  }
+
+  setFriendList(allUsers);
 }
 
-const FriendsList: React.FC<FriendsListProps> = ({ steamid }) => {
+const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
+  const [friendList, setFriendList] = React.useState<userObj[] | null>(null);
+  const [showMoreFriends, setShowMoreFriends] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    fetch(`${backendAddress}/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=76561197960435530`)
-    .then(d => d.json())
-    .then(d => {
-      const steamid = d.response.players[0].steamid;
-      getFriendsList(steamid);
-    })
-  }, []);
+    if (!steamUser) return;
+    fetch(`${backendAddress}/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamUser.steamid}`)
+      .then(d => d.json())
+      .then(d => {
+        const steamid = d.response.players[0].steamid;
+        getFriendsList(steamid, setFriendList);
+      })
+  }, [steamUser]);
 
 
   return <div className="friends-list-container">
-    
+    <h3>
+      <span className="material-symbols-outlined">group</span>
+      Friends
+    </h3>
+
+    <div className={`friend-list ${showMoreFriends ? "open" : ""}`}>
+      {!friendList && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
+      {friendList && <>
+        {!friendList.length && "You haven’t friends yet..."}
+        {friendList.length &&
+          <>
+            {friendList.map(el => {
+              return <div
+                key={uuid4()}
+                style={{
+                  backgroundImage: `url(${el.avatarfull})`,
+                }}
+                className="friend-list-container">
+
+              </div>
+            })}
+          </>
+        }
+
+
+      </>}
+    </div>
+    {friendList && friendList.length > 12 && <div
+      onClick={() => {
+        setShowMoreFriends(!showMoreFriends);
+      }}
+      className="see-more-btn">
+      {showMoreFriends ? "Show less..." : "See more..."}
+    </div>}
   </div>
 }
 
