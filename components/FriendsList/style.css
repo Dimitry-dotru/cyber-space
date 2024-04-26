@@ -44,7 +44,7 @@
   gap: var(--gap);
   flex-wrap: wrap;
   max-height: var(--friend-list-max-height);
-  overflow: hidden;
+  overflow-y: hidden;
   margin-bottom: 12.5px;
   transition: .5s;
 }
@@ -61,7 +61,7 @@
 
 .friend-list.open {
   max-height: 825px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 .friend-list .friend-list-box {
@@ -72,3 +72,22 @@
   background-position: center;
   background-size: cover;
 }
+
+/* .friend-list-box-container {
+  position: relative;
+  transition: .3s;
+}
+
+.friend-list-box-container:hover {
+  scale: 1.1;
+}
+
+.friend-list-box-info {
+  position: absolute;
+  overflow: hidden;
+  max-height: 0;
+  transition: .3s;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+} */

@@ -55,25 +55,36 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
     </h3>
 
     <div className={`friend-list ${showMoreFriends ? "open" : ""}`}>
-      {!friendList && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
-      {friendList && <>
-        {!friendList.length && "You haven’t friends yet..."}
-        {friendList.length &&
-          <>
-            {friendList.map(el => {
-              return <div
-                key={uuid4()}
-                style={{
-                  backgroundImage: `url(${el.avatarfull})`,
-                }}
-                className="friend-list-box">
+      {/* если не авторизован, то вывести сообщение чтобы авторизовался */}
+      {!steamUser && <span style={{ alignSelf: "flex-start" }}>Authorise to see your friends!</span>}
 
-              </div>
-            })}
-          </>
-        }
+      {steamUser && <>
+        {/* если авторизован, но пока нету данных о друзьях, отобразить загрузку */}
+        {!friendList && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
+        {/* и когда друзья были получены, выводим их */}
+        {friendList && <>
+          {!friendList.length && "You haven’t friends yet..."}
+          {friendList.length &&
+            <>
+              {friendList.map(el => {
+                return <div key={uuid4()} className="friend-list-box-container">
+                  <div
+                    style={{
+                      backgroundImage: `url(${el.avatarfull})`,
+                    }}
+                    className="friend-list-box">
+
+                  </div>
+                  <div className="friend-list-box-info">
+                    {el.personaname}
+                  </div>
+                </div>
+              })}
+            </>
+          }
 
 
+        </>}
       </>}
     </div>
     {friendList && friendList.length > 12 && <div
