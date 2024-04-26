@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import userLogo from "@/public/img/non_authorised_user.png";
+import userLogo from "@/public/img/default-imgs/non_authorised_user.png";
 import "./style.css";
 
 import { userObj } from "@/src/utils/types/steamTypes";
