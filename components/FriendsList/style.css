@@ -80,7 +80,7 @@
 
 .friend-list-box-container:hover {
   scale: 1.1;
-}
+}*/
 
 .friend-list-box-info {
   position: absolute;
@@ -90,4 +90,4 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-} */
+}
