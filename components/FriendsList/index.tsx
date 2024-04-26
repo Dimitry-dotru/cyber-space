@@ -66,7 +66,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
                 style={{
                   backgroundImage: `url(${el.avatarfull})`,
                 }}
-                className="friend-list-container">
+                className="friend-list-box">
 
               </div>
             })}

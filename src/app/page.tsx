@@ -76,6 +76,7 @@ export default function Home() {
       setSteamUser(data);
       if (!data) {
         window.localStorage.clear();
+        window.location.reload();
         return;
       }
       window.localStorage.setItem("sessionID", sessionID);

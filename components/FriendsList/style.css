@@ -1,10 +1,25 @@
 .friends-list-container {
+  /* кол-во строк */
+  --friend-box-rows: 4;
+  --elements-in-row: 4;
+  --friends-list-container-side-paddings: 25px;
+  --friend-box-size: 80px;
+  --friends-list-cotainer-width: 400px;
+
+  /* вычисляем ширину контейнера для списка с друзьями */
+  --friend-list-width: calc(var(--friends-list-cotainer-width) - var(--friends-list-container-side-paddings) * 2);
+  /* вычисляем расстояние между квадратиками */
+  --gap: calc((var(--friend-list-width) - var(--friend-box-size) * var(--elements-in-row)) / (var(--elements-in-row) - 1));
+  /* вычисляем максимальную отображаемую высоту */
+  --friend-list-max-height: calc(
+    (var(--friend-box-size) + var(--gap)) 
+    * var(--friend-box-rows));
+
   display: flex;
   align-items: flex-end;
   flex-direction: column;
-  width: 100%;
-  max-width: 400px;
-  padding: 25px;
+  width: var(--friends-list-cotainer-width);
+  padding: 25px var(--friends-list-container-side-paddings);
   padding-top: 20px;
   background-color: var(--main-color-opacity);
   border: 1px solid var(--primary-color);
@@ -25,9 +40,10 @@
 
 .friend-list {
   display: flex;
-  gap: 5px;
+  width: var(--friend-list-width);
+  gap: var(--gap);
   flex-wrap: wrap;
-  max-height: 259px;
+  max-height: var(--friend-list-max-height);
   overflow: hidden;
   margin-bottom: 12.5px;
   transition: .5s;
@@ -48,9 +64,9 @@
   overflow: scroll;
 }
 
-.friend-list .friend-list-container {
-  width: 83px;
-  height: 83px;
+.friend-list .friend-list-box {
+  width: var(--friend-box-size);
+  height: var(--friend-box-size);
   border-radius: 5px;
   border: 1px solid var(--grey);
   background-position: center;
