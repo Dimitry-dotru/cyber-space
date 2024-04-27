@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import bunner from '@/public/img/default-imgs/banner_default.webp'
 import avatar from '@/public/img/default-imgs/non_authorised_user.png'
-import edit_bunner from '@/public/img/default-imgs/edit_bunner.svg'
+import edit_banner from '@/public/img/default-imgs/edit_banner.svg'
 import "./style.css";
 
 interface UserBannerProps {
@@ -26,10 +26,10 @@ const UserBanner: React.FC<UserBannerProps> = ({
   // тут твой код дальше
   return <>
     <div className="image-container">
-      <Image src={bunner}  alt="Bunner" className="bunner" />
+      <Image src={bunner}  alt="Banner" className="banner" />
       <Image src={steamUser ? steamUser.avatar : "/img/default-imgs/non_authorised_user.png"} width={250} height={250} alt="Avatar" className="avatar" />
       <button className="edit-button"  onClick={handleEditClick}>
-      <Image src={edit_bunner}  alt="edit bunner" className="edit-icon"></Image>
+      <Image src={edit_banner}  alt="edit banner" className="edit-icon"></Image>
       </button>
     </div>
   </>
