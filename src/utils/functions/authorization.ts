@@ -23,11 +23,14 @@ const getSessionId = (): null | string => {
   const sessionID = params.get("sessionID")
     ? params.get("sessionID")
     : window.localStorage.getItem("sessionID");
-  
+
+  // console.log(params.get("sessionID"));
+  // return sessionID;
   if (!sessionID) return null;
+  window.localStorage.setItem("sessionID", sessionID);
   const url = window.location.href.split("?")[0];
   window.history.replaceState({}, document.title, url);
   return sessionID;
-}
+};
 
 export { logoutHandler, getSessionId };

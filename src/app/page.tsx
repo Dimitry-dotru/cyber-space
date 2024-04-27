@@ -69,21 +69,16 @@ export default function Home() {
 
   React.useEffect(() => {
     const asyncFunc = async (
-      sessionID: string,
+      sessionID: string | null,
       setSteamUser: (arg: userObj | null) => void
     ) => {
+      if (!sessionID) return;
       const data = await getUser(sessionID);
       setSteamUser(data);
-      if (!data) {
-        window.localStorage.clear();
-        window.location.reload();
-        return;
-      }
-      window.localStorage.setItem("sessionID", sessionID);
+      window.localStorage.setItem("sessionID", sessionID!);
     }
 
     const sessionID = getSessionId();
-    if (!sessionID) return;
     asyncFunc(sessionID, setSteamUser);
   }, []);
 

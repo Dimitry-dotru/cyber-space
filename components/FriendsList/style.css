@@ -1,6 +1,6 @@
 .friends-list-container {
   /* кол-во строк */
-  --friend-box-rows: 4;
+  --friend-box-rows: 3;
   --elements-in-row: 4;
   --friends-list-container-side-paddings: 25px;
   --friend-box-size: 80px;

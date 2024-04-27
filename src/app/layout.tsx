@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -12,12 +12,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
-  React.useEffect(() => {
-    // с этим чуть позже разберусь
-    // document.documentElement.style.setProperty("--body-bg-image", bgImage.src);
-  }, []);
-
   return (
     <html lang="en">
       <head>

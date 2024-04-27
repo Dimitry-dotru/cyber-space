@@ -64,7 +64,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
         {/* и когда друзья были получены, выводим их */}
         {friendList && <>
           {!friendList.length && "You haven’t friends yet..."}
-          {friendList.length &&
+          {friendList.length !== 0 &&
             <>
               {friendList.map(el => {
                 return <div key={uuid4()} className="friend-list-box-container">
@@ -82,8 +82,6 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
               })}
             </>
           }
-
-
         </>}
       </>}
     </div>

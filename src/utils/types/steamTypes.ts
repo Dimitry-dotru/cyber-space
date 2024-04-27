@@ -15,7 +15,10 @@ export type userObj = {
   profileurl: string;
   steamid: string;
   timecreated: number;
-}
+
+  // my custom fields:
+  userbanner: string;
+};
 
 export type friendObj = {
   friend_since: number;
