@@ -1,4 +1,5 @@
 export type userObj = {
+  userbanner: any;
   avatar: string;
   avatarfull: string;
   avatarhash: string;
