@@ -9,6 +9,7 @@ import { getSessionId } from '../utils/functions/authorization';
 
 import Header from '@/components/Header';
 import FriendsList from '@/components/FriendsList';
+import UserBanner from '@/components/UserBanner';
 
 // const FriendsList: React.FC<{ steamUser: userObj }> = ({
 //   steamUser
@@ -90,9 +91,10 @@ export default function Home() {
   return (
     <>
       <Header steamUser={steamUser} setSteamUser={setSteamUser} />
+      <UserBanner steamUser={steamUser} />
       <main>
         <div className="testing-block">
-
+        
 
         </div>
 
