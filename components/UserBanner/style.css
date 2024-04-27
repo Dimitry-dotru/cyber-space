@@ -3,35 +3,31 @@
     width: 100%;
     height: 100%;
   }
-.bunner{
-    width: 1805px;
+.banner{
+    width: 100%;
     height: 300px;
-    flex-shrink: 0;
     border-radius: 10px;
-    background: lightgray 50% / cover no-repeat, var(--Main-color, #2F324E);
-    margin-left: 50px;
-    margin-right: 50px;
+    background: lightgray 50% / cover no-repeat, var(--main-color, #2F324E);
+    padding-left: 50px;
+    padding-right: 50px;
     margin-top: 25px;
     margin-bottom: 81px;
     position: relative; 
-    display: flex;
 }
 .avatar{
     width: 250px;
     height: 250px;
-    flex-shrink: 0;
     border-radius: 10000px;
-    border: 1px solid var(--Primary-color, #797E93);
+    border: 1px solid var(--primary-color, #797E93);
     background: lightgray 0px 0px / 100% 100% no-repeat, #393E5A;
     position: absolute;
-    top: 80%;
-    left: 10%;
-    transform: translate(-50%, -50%);
+    top: 106px;
+    left: 75px;
+    /* transform: translate(-50%, -50%); */
     border-radius: 50%
 }
 .edit-button {
     position: absolute;
-    flex-shrink: 0;
     top: 20px; 
     right: 70px; 
     background: none;
@@ -39,8 +35,9 @@
     cursor: pointer;
   }
 .edit-icon{
+    margin-top: 20px;
+    margin-right: 40px;
     width: 40px;
     height: 40px;
-    flex-shrink: 0;
 }
   
