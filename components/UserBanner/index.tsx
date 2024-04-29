@@ -27,7 +27,7 @@ const UserBanner: React.FC<UserBannerProps> = ({
   return <>
     <div className="image-container">
       <Image src={bunner}  alt="Banner" className="banner" />
-      <Image src={steamUser ? steamUser.avatar : "/img/default-imgs/non_authorised_user.png"} width={250} height={250} alt="Avatar" className="avatar" />
+      <Image src={steamUser ? steamUser.avatarfull : "/img/default-imgs/non_authorised_user.png"} width={250} height={250} alt="Avatar" className="avatar" />
       <button className="edit-button"  onClick={handleEditClick}>
       <Image src={edit_banner}  alt="edit banner" className="edit-icon"></Image>
       </button>
