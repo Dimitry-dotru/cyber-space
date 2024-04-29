@@ -45,7 +45,6 @@
 } */
 
 main {
-  padding-top: 50px;
   color: var(--white);
   display: flex;
   align-items: flex-start;
