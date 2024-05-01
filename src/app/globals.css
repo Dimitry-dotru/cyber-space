@@ -236,3 +236,24 @@ a {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.block-primary {
+  border: 1px solid var(--primary-color);
+  background-color: var(--main-color-opacity);
+}
+
+.radius-top {
+  --border-top-radius: 10px;
+  border-top-left-radius: var(--border-top-radius);
+  border-top-right-radius: var(--border-top-radius);
+}
+
+.radius-bottom {
+  --border-bottom-radius: 10px;
+  border-bottom-left-radius: var(--border-bottom-radius);
+  border-bottom-right-radius: var(--border-bottom-radius);
+}
+
+.p-25 {
+  padding: 25px;
+}

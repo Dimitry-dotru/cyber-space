@@ -18,7 +18,9 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header className="header">
       <div>
-        <Image src={logo} alt="Logo" />
+        <a href="/">
+          <Image src={logo} alt="Logo" />
+        </a>
       </div>
       <div className="container-navigate">
         <div className="navigate">

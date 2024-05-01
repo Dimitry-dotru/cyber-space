@@ -27,7 +27,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ setSteamUser, steamUser }) =>
     <div className={`user-dropdown ${isOpen ? "open" : ""}`}>
       <ul className="user-dropdown-container">
         <a href="/"> <li><span className="material-symbols-outlined">account_circle</span>Profile</li></a>
-        <a href="/"><li><span className="material-symbols-outlined">settings</span>Settings</li></a>
+        <a href="/settings"><li><span className="material-symbols-outlined">settings</span>Settings</li></a>
         <hr className="separate-line" />
         <a
           onClick={() => {
