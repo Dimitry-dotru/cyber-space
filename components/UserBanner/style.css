@@ -1,43 +1,47 @@
-.image-container {
+.banner-container {
     position: relative;
-    width: 100%;
     height: 100%;
+    margin-left: 50px;
+    margin-right: 50px;
   }
 .banner{
     width: 100%;
     height: 300px;
     border-radius: 10px;
-    background: lightgray 50% / cover no-repeat, var(--main-color, #2F324E);
-    padding-left: 50px;
-    padding-right: 50px;
     margin-top: 25px;
     margin-bottom: 81px;
-    position: relative; 
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.30);
 }
 .avatar{
     width: 250px;
     height: 250px;
     border-radius: 10000px;
-    border: 1px solid var(--primary-color, #797E93);
-    background: lightgray 0px 0px / 100% 100% no-repeat, #393E5A;
+    border: 1px solid #797E93;
     position: absolute;
-    top: 106px;
-    left: 75px;
+    margin-left: 25px;
+    margin-top: 106px;
+    left: 0px;
     /* transform: translate(-50%, -50%); */
     border-radius: 50%
 }
 .edit-button {
     position: absolute;
     top: 20px; 
-    right: 70px; 
+    right: 0px; 
     background: none;
     border: none;
     cursor: pointer;
   }
-.edit-icon{
-    margin-top: 20px;
-    margin-right: 40px;
-    width: 40px;
-    height: 40px;
+.edit-box-circle{
+  margin-top: 20px;
+  margin-right: 40px;
+  background-color: #0073EA;
+  border-radius: 50px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
 }
+
   

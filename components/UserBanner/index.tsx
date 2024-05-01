@@ -18,18 +18,20 @@ interface UserBannerProps {
 const UserBanner: React.FC<UserBannerProps> = ({
   steamUser
 }) => {
-  const userBanner = steamUser ? steamUser.userbanner : "/img/default-imgs/banner_default.webp";
+  // const userBanner = steamUser ? steamUser.userbanner : bunner;
   const handleEditClick = () => {
     // Обработчик клика по кнопке редактирования
     console.log("Edit button clicked");
   };
   // тут твой код дальше
   return <>
-    <div className="image-container">
+    <div className="banner-container">
       <Image src={bunner}  alt="Banner" className="banner" />
-      <Image src={steamUser ? steamUser.avatarfull : "/img/default-imgs/non_authorised_user.png"} width={250} height={250} alt="Avatar" className="avatar" />
+      <Image src={steamUser ? steamUser.avatarfull : avatar} width={250} height={250} alt="Avatar" className="avatar" />
       <button className="edit-button"  onClick={handleEditClick}>
-      <Image src={edit_banner}  alt="edit banner" className="edit-icon"></Image>
+        <div className="edit-box-circle">
+      <span className="material-symbols-outlined">edit</span>
+      </div>
       </button>
     </div>
   </>
