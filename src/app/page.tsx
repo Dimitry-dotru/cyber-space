@@ -9,6 +9,7 @@ import { getSessionId } from '../utils/functions/authorization';
 
 import Header from '@/components/Header';
 import FriendsList from '@/components/FriendsList';
+import UserBanner from '@/components/UserBanner';
 
 // const FriendsList: React.FC<{ steamUser: userObj }> = ({
 //   steamUser
@@ -69,30 +70,26 @@ export default function Home() {
 
   React.useEffect(() => {
     const asyncFunc = async (
-      sessionID: string,
+      sessionID: string | null,
       setSteamUser: (arg: userObj | null) => void
     ) => {
+      if (!sessionID) return;
       const data = await getUser(sessionID);
       setSteamUser(data);
-      if (!data) {
-        window.localStorage.clear();
-        window.location.reload();
-        return;
-      }
-      window.localStorage.setItem("sessionID", sessionID);
+      window.localStorage.setItem("sessionID", sessionID!);
     }
 
     const sessionID = getSessionId();
-    if (!sessionID) return;
     asyncFunc(sessionID, setSteamUser);
   }, []);
 
   return (
     <>
       <Header steamUser={steamUser} setSteamUser={setSteamUser} />
+      <UserBanner steamUser={steamUser} />
       <main>
         <div className="testing-block">
-
+        
 
         </div>
 

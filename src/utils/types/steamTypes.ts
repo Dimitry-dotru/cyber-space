@@ -1,4 +1,5 @@
 export type userObj = {
+  userbanner: any;
   avatar: string;
   avatarfull: string;
   avatarhash: string;
@@ -15,7 +16,10 @@ export type userObj = {
   profileurl: string;
   steamid: string;
   timecreated: number;
-}
+
+  // my custom fields:
+  userbanner: string;
+};
 
 export type friendObj = {
   friend_since: number;
