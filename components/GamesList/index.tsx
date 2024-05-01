@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { userObj, gameObj, countendAchievementsProps } from "@/src/utils/types/steamTypes";
 import { getAchievementsInfo } from "@/src/utils/functions/steamRequests";
+import { v4 as uuid4 } from "uuid";
 
 import "./style.css";
 
@@ -11,6 +12,7 @@ interface GamesListProps {
 const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
   const [showMoreGames, setShowMoreGames] = React.useState(false);
   const [gamesList, setGamesList] = React.useState<null | gameObj[]>(null);
+  const [gamesElements, setGamesElements] = React.useState<React.ReactNode[]>([]);
 
   React.useEffect(() => {
     if (!steamUser) {
@@ -33,11 +35,15 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
           }
           return 0;
         });
+        if (gamesArr) {
+          gamesArr.map(el => {
+            gamesElements.push(<GameElement key={uuid4()} steamid={steamUser.steamid} gameListEl={el} />);
+            setGamesElements([...gamesElements]);
+          });
+        }
         setGamesList(gamesArr);
-        // getGamesAchievements(gamesArr, steamUser.steamid);
       });
   }, [steamUser]);
-
 
   return <div className="games-list-container">
     <h3>
@@ -49,20 +55,20 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
       {/* если не авторизован, то вывести сообщение чтобы авторизовался */}
       {!steamUser && <span style={{ alignSelf: "flex-start" }}>Authorise to see your friends!</span>}
 
-      {steamUser && <>
+      {/* {steamUser && <> */}
         {/* если авторизован, но пока нету данных о играх, отобразить загрузку */}
         {!gamesList && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
         {/* и когда игры были получены, выводим их */}
-        {gamesList && <>
+        {gamesElements}
+        {/* {gamesList && <>
           {!gamesList.length && "You haven’t games yet..."}
           {gamesList.length &&
-            // <GameElement gameListEl={gamesList[0]} steamid={steamUser.steamid} />
             gamesList.map(el => {
-              return <GameElement gameListEl={el} steamid={steamUser.steamid} />
+              return <GameElement key={uuid4()} gameListEl={el} steamid={steamUser.steamid} />
             })
           }
-        </>}
-      </>}
+        </>} */}
+      {/* </>} */}
     </div>
     {gamesList && gamesList.length > 12 && <div
       onClick={(e) => {
@@ -110,12 +116,10 @@ const GameElement: React.FC<GameElementProps> = ({ steamid, gameListEl }) => {
 
 
   React.useEffect(() => {
-    +totalPlayTime <= 1 ? console.log(totalPlayTime) : null;
     const func = async () => {
       const data = await getAchievementsInfo(steamid, gameListEl.appid);
       setAchievements(data);
     }
-
     func();
   }, []);
 

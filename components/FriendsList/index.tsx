@@ -77,6 +77,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
         {!friendList && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
         {/* и когда друзья были получены, выводим их */}
         {friendList && <>
+          {/* если уже так получилось что друзей нету */}
           {!friendList.length && "You haven’t friends yet..."}
           {friendList.length !== 0 &&
             <>
