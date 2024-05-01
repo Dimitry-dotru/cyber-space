@@ -13,6 +13,7 @@ const logoutHandler = (setSteamUser: (arg: userObj | null) => void) => {
       }
       window.localStorage.removeItem("sessionID");
       setSteamUser(null);
+      window.location.reload();
       return d.text();
     })
     .then((d) => console.log(d));

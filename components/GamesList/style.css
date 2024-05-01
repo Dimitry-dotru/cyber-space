@@ -1,0 +1,81 @@
+.games-list-container {
+  --games-list-element-height: 80px;
+  --games-list-element-width: 100%;
+  --games-list-element-gap: 20px;
+  --games-list-rows: 5;
+
+
+  width: 100%;
+  min-height: 400px;
+  background-color: var(--main-color-opacity);
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding: 25px;
+  padding-top: 20px;
+}
+
+.games-list-container h3 {
+  display: flex;
+  gap: 5px;
+  font-weight: 500;
+  font-size: 24px;
+  align-items: center;
+  margin-bottom: 25px;
+  align-self: flex-start;
+}
+
+.games-list {
+  display: flex;
+  /* width: var(--friend-list-width); */
+  gap: var(--gap);
+  flex-wrap: wrap;
+  /* max-height: var(--friend-list-max-height); */
+  overflow-y: hidden;
+  margin-bottom: 12.5px;
+  transition: .5s;
+}
+
+.games-list {
+  scrollbar-width: none;
+}
+
+.games-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.games-list.open {
+  max-height: 825px;
+  overflow-y: scroll;
+}
+
+/* .games-list .games-list-box {
+  width: var(--friend-box-size);
+  height: var(--friend-box-size);
+  border-radius: 5px;
+  border: 1px solid var(--grey);
+  background-position: center;
+  background-size: cover;
+} */
+
+/* .friend-list-box-container {
+  position: relative;
+  transition: .3s;
+}
+
+.friend-list-box-container:hover {
+  scale: 1.1;
+}*/
+/* 
+.games-list-box-info {
+  position: absolute;
+  overflow: hidden;
+  max-height: 0;
+  transition: .3s;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+} */

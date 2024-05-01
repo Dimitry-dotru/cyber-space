@@ -1,5 +1,4 @@
 export type userObj = {
-  userbanner: any;
   avatar: string;
   avatarfull: string;
   avatarhash: string;
@@ -19,22 +18,33 @@ export type userObj = {
 
   // my custom fields:
   userbanner: string;
+  userbgpattern: string;
 };
 
 export type friendObj = {
   friend_since: number;
   relationship: string;
   steamid: string;
-}
+};
 
 export type gameObj = {
   appid: number;
-  img_icon_url: string;
-  name: string;
-  playtime_2weeks: number;
   playtime_deck_forever: number;
+  playtime_disconnected: number;
   playtime_forever: number;
   playtime_linux_forever: number;
   playtime_mac_forever: number;
   playtime_windows_forever: number;
-}
+  rtime_last_played: number;
+};
+
+export type achievementsForGame = {
+  steamID: string;
+  gameName: string;
+  achievements: {
+    apiname: string;
+    achieved: 0 | 1;
+    unlocktime: number;
+  }[];
+  success: boolean;
+};

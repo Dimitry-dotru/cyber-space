@@ -30,6 +30,20 @@ async function getFriendsList(steamid: string, setFriendList: (arg: null | userO
     })
   }
 
+  // sort by alphabet...
+  allUsers.sort((a, b) => {
+    const nameA = a.personaname.toUpperCase();
+    const nameB = b.personaname.toUpperCase();
+
+    if (nameA > nameB) {
+      return -1;
+    }
+    if (nameA < nameB) {
+      return 1;
+    }
+    return 0;
+  });
+
   setFriendList(allUsers);
 }
 
