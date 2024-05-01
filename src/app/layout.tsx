@@ -3,7 +3,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import React from "react";
-import bgImage from "@/public/img/user-shell/bg-pattern.png";
 
 const inter = Inter({ subsets: ["latin"] });
 

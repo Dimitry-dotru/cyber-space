@@ -30,6 +30,20 @@ async function getFriendsList(steamid: string, setFriendList: (arg: null | userO
     })
   }
 
+  // sort by alphabet...
+  allUsers.sort((a, b) => {
+    const nameA = a.personaname.toUpperCase();
+    const nameB = b.personaname.toUpperCase();
+
+    if (nameA > nameB) {
+      return -1;
+    }
+    if (nameA < nameB) {
+      return 1;
+    }
+    return 0;
+  });
+
   setFriendList(allUsers);
 }
 
@@ -51,7 +65,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
   return <div className="friends-list-container">
     <h3>
       <span className="material-symbols-outlined">group</span>
-      Friends
+      Friends {friendList && friendList.length && <>({friendList.length})</>}
     </h3>
 
     <div className={`friend-list ${showMoreFriends ? "open" : ""}`}>
@@ -86,7 +100,11 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
       </>}
     </div>
     {friendList && friendList.length > 12 && <div
-      onClick={() => {
+      onClick={(e) => {
+        if (showMoreFriends) {
+          const friendListDiv = (e.target as HTMLDivElement).previousElementSibling;
+          friendListDiv!.scrollTop = 0;
+        }
         setShowMoreFriends(!showMoreFriends);
       }}
       className="see-more-btn">

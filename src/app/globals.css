@@ -56,14 +56,19 @@ main {
 @media (prefers-color-scheme: dark) {
 }
 
-body {
-  min-height: 100dvh;
+html {
   background-image: var(--body-gradient);
-  position: relative;
   background-attachment: fixed;
 }
 
-body::after {
+body {
+  min-height: 100dvh;
+  background-size: 60%;
+  background-repeat: repeat;
+  background-attachment: fixed;
+}
+
+/* body::after {
   content: "";
   top: 0;
   left: 0;
@@ -75,7 +80,7 @@ body::after {
   background-repeat: repeat;
   position: fixed;
   z-index: -1;
-}
+} */
 
 button,
 a {
@@ -235,4 +240,26 @@ a {
 .see-more-btn:hover {
   text-decoration: underline;
   cursor: pointer;
+}
+
+.gap-5 {
+  display: flex;
+  gap: 5px;
+}
+
+.direction-column {
+  flex-direction: column;
+}
+
+.justify-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.relative {
+  position: relative;
+}
+
+.w-max {
+  width: 100%;
 }
