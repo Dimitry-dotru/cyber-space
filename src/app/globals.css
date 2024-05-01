@@ -241,3 +241,25 @@ a {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.gap-5 {
+  display: flex;
+  gap: 5px;
+}
+
+.direction-column {
+  flex-direction: column;
+}
+
+.justify-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.relative {
+  position: relative;
+}
+
+.w-max {
+  width: 100%;
+}

@@ -1,4 +1,4 @@
-import { userObj, achievementsForGame } from "../types/steamTypes";
+import { userObj, achievementsForGame, countendAchievementsProps } from "../types/steamTypes";
 
 const getUser = async (sessionID: string) => {
   const data = await fetch(
@@ -29,30 +29,29 @@ const getUsers = (
     });
 };
 
-const getAchievementsInfo = async (steamid: string, gameids: number[]) => {
-  // const data = await fetch(`${process.env.backendAddress}/steam/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${gameid}&key=${process.env.apiKey}&steamid=${steamid}`);
-  const data: any = {};
-
-
-
-  // console.log(await data.json());
-  return;
-
-  if (!data.ok) {
-    // что-то не так с ачивками для игры
-    return null;
-  }
+const getAchievementsInfo = async (steamid: string, gameid: number) => {
+  const data = await fetch(`${process.env.backendAddress}/steam/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${gameid}&key=${process.env.apiKey}&steamid=${steamid}`);
 
   const gamesAchievements = (await data.json())
     .playerstats as achievementsForGame;
 
-  const gameAchivementsInfo = {
+  const gameAchivementsInfo: countendAchievementsProps = {
     totalAchievements: 0,
     completed: 0,
-    gameName: "",
+    gameName: gamesAchievements.gameName,
     completePercentage: 0,
+    hasAchievements: true
   };
 
+  if (!gamesAchievements.achievements && !gamesAchievements.success) {
+    return null;
+  }
+  
+  if (!gamesAchievements.achievements) {
+    gameAchivementsInfo.hasAchievements = false;
+
+    return gameAchivementsInfo;
+  }
   gamesAchievements.achievements.forEach((el) =>
     el.achieved ? (gameAchivementsInfo.completed += 1) : null
   );
