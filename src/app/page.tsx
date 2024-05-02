@@ -2,172 +2,57 @@
 import React from "react";
 import Image from "next/image";
 import imgErrorPic from "../../public/img/error-img/unknown_game.jpg";
-import Input from "../../components/Input";
-const apiKey = "BDE51B80D4D4E0257B60610C0B3FE6F6";
+import { userObj } from '../utils/types/steamTypes';
+import { getUser } from '../utils/functions/steamRequests';
+import { getSessionId } from '../utils/functions/authorization';
 
-interface userObj {
-  avatar: string;
-  avatarfull: string;
-  avatarhash: string;
-  avatarmedium: string;
-  communityvisibilitystate: number;
-  lastlogoff: number;
-  loccountrycode: string;
-  locstatecode: string;
-  personaname: string;
-  personastate: number;
-  personastateflags: number;
-  primaryclanid: string;
-  profilestate: number;
-  profileurl: string;
-  steamid: string;
-  timecreated: number;
-}
+import Header from '@/components/Header';
+import FriendsList from '@/components/FriendsList';
+import GamesList from '@/components/GamesList';
+import UserBanner from '@/components/UserBanner';
+import ShareYourThoughts from '@/components/ShareYourThoughts';
 
-interface friendObj {
-  friend_since: number;
-  relationship: string;
-  steamid: string;
-}
-
-interface gameObj {
-  appid: number;
-  img_icon_url: string;
-  name: string;
-  playtime_2weeks: number;
-  playtime_deck_forever: number;
-  playtime_forever: number;
-  playtime_linux_forever: number;
-  playtime_mac_forever: number;
-  playtime_windows_forever: number;
-}
-
-const getUser = (
-  sessionID: string,
-  setSteamUser?: (arg: userObj | null) => void
-) => {
-  fetch("http://localhost:7069" + "/?sessionID=" + sessionID)
-    .then((d) => {
-      if (!d.ok) {
-        setSteamUser ? setSteamUser(null) : null;
-        throw new Error("User not found!");
-      }
-      return d.json();
-    })
-    .then((d: userObj) => {
-      if (setSteamUser) setSteamUser(d);
-      console.log(d);
-    })
-    .catch((reason) => {
-      console.log(reason);
-    });
-};
-
-const logoutHandler = (setSteamUser: (arg: userObj | null) => void) => {
-  const sessionID = window.localStorage.getItem("sessionID");
-  if (!sessionID) return;
-  fetch(`http://localhost:7069/logout/?sessionID=${sessionID}`, {
-    method: "post",
-  })
-    .then((d) => {
-      if (!d.ok) {
-        throw new Error("Error with logout!");
-      }
-      window.localStorage.removeItem("sessionID");
-      setSteamUser(null);
-      return d.text();
-    })
-    .then((d) => console.log(d));
-};
-
-const getUsers = (
-  steamids: string[],
-  setUsers: (arg: userObj[] | null) => void
-) => {
-  fetch(
-    `http://localhost:7069/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamids.join(
-      ","
-    )}`
-  )
-    .then((d) => d.json())
-    .then((d) => {
-      const usersObj = d.response.players as userObj[];
-      setUsers(usersObj);
-    });
-};
-
-const FriendsList: React.FC<{ steamUser: userObj }> = ({ steamUser }) => {
-  const [userFriends, setUserFriends] = React.useState<userObj[] | null>(null);
-
-  React.useEffect(() => {
-    fetch(
-      `http://localhost:7069/steam/ISteamUser/GetFriendList/v0001/?key=${apiKey}&steamid=${steamUser.steamid}&relationship=friend`
-    )
-      .then((d) => d.json())
-      .then((d) => {
-        const friendsList = d.friendslist.friends as friendObj[];
-        getUsers(
-          friendsList.map((el) => el.steamid),
-          setUserFriends
-        );
-      });
-  }, []);
-
-  return (
-    <>
-      {userFriends && (
-        <div className="friends-list">
-          {userFriends.map((el, idx) => {
-            return (
-              <div className="friends-list-item">
-                <img src={el.avatarfull} alt="friend's avatar" />
-                <h3>{el.personaname}</h3>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </>
-  );
-};
-
-const GamesList: React.FC<{ steamUser: userObj }> = ({ steamUser }) => {
-  const [userGames, setUserGames] = React.useState<gameObj[] | null>(null);
-
-  React.useEffect(() => {
-    fetch(
-      `http://localhost:7069/steam/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${apiKey}&steamid=${steamUser.steamid}&format=json`
-    )
-      .then((d) => d.json())
-      .then((d) => {
-        const recentlyGamesList = d.response.games as gameObj[];
-        console.log(recentlyGamesList);
-        setUserGames(recentlyGamesList);
-      });
-  }, []);
-
-  return (
-    <>
-      {userGames && (
-        <div className="games-list">
-          {userGames.map((el, idx) => {
-            const link =
-              el.img_icon_url !== ""
-                ? `https://media.steampowered.com/steamcommunity/public/images/apps/${el.appid}/${el.img_icon_url}.jpg`
-                : imgErrorPic;
-            return (
-              <div className="games-list-item">
-                <Image width={50} height={50} src={link} alt="game icon" />
-                <h3>{el.name}</h3>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </>
-  );
-};
 
 export default function Home() {
-  return <Input />;
+  const [steamUser, setSteamUser] = React.useState<userObj | null>(null);
+
+  React.useEffect(() => {
+    const asyncFunc = async (
+      sessionID: string | null,
+      setSteamUser: (arg: userObj | null) => void
+    ) => {
+      if (!sessionID) return;
+      const data = await getUser(sessionID);
+      setSteamUser(data);
+      if (data) {
+        document.body.style.backgroundImage = `url(${data.userbgpattern})`;
+      }
+      window.localStorage.setItem("sessionID", sessionID!);
+    }
+
+    const sessionID = getSessionId();
+    asyncFunc(sessionID, setSteamUser);
+  }, []);
+
+  return (
+    <>
+      <Header steamUser={steamUser} setSteamUser={setSteamUser} />
+      <UserBanner steamUser={steamUser} />
+      <main>
+        <div className="container">
+          <ShareYourThoughts steamUser={steamUser} />
+          <div className="testing-block ">
+          </div>
+
+        </div>
+
+
+
+        <aside>
+          <FriendsList steamUser={steamUser} />
+          <GamesList steamUser={steamUser} />
+        </aside>
+      </main>
+    </>
+  );
 }

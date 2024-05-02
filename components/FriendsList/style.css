@@ -1,0 +1,95 @@
+.friends-list-container {
+  /* кол-во строк */
+  --friend-box-rows: 3;
+  --elements-in-row: 4;
+  --friends-list-container-side-paddings: 25px;
+  --friend-box-size: 80px;
+  --friends-list-cotainer-width: 400px;
+
+  /* вычисляем ширину контейнера для списка с друзьями */
+  --friend-list-width: calc(var(--friends-list-cotainer-width) - var(--friends-list-container-side-paddings) * 2);
+  /* вычисляем расстояние между квадратиками */
+  --gap: calc((var(--friend-list-width) - var(--friend-box-size) * var(--elements-in-row)) / (var(--elements-in-row) - 1));
+  /* вычисляем максимальную отображаемую высоту */
+  --friend-list-max-height: calc(
+    (var(--friend-box-size) + var(--gap)) 
+    * var(--friend-box-rows));
+
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  width: var(--friends-list-cotainer-width);
+  padding: 25px var(--friends-list-container-side-paddings);
+  padding-top: 20px;
+  background-color: var(--main-color-opacity);
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.30)
+}
+
+.friends-list-container h3 {
+  display: flex;
+  gap: 5px;
+  font-weight: 500;
+  font-size: 24px;
+  align-items: center;
+  margin-bottom: 25px;
+  align-self: flex-start;
+}
+
+.friend-list {
+  display: flex;
+  width: var(--friend-list-width);
+  gap: var(--gap);
+  flex-wrap: wrap;
+  max-height: var(--friend-list-max-height);
+  overflow-y: hidden;
+  margin-bottom: 12.5px;
+  transition: .5s;
+}
+
+.friend-list {
+  scrollbar-width: none;
+}
+
+.friend-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.friend-list.open {
+  max-height: 825px;
+  overflow-y: scroll;
+}
+
+.friend-list .friend-list-box {
+  width: var(--friend-box-size);
+  height: var(--friend-box-size);
+  border-radius: 5px;
+  border: 1px solid var(--grey);
+  background-position: center;
+  background-size: cover;
+}
+
+/* .friend-list-box-container {
+  position: relative;
+  transition: .3s;
+}
+
+.friend-list-box-container:hover {
+  scale: 1.1;
+}*/
+
+.friend-list-box-info {
+  position: absolute;
+  overflow: hidden;
+  max-height: 0;
+  transition: .3s;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
