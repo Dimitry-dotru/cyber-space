@@ -1,4 +1,7 @@
+"use client"
+
 import React from "react";
+import { useRouter } from "next/navigation";
 import { v4 as uuid4 } from "uuid";
 
 import "./style.css";
@@ -50,6 +53,7 @@ async function getFriendsList(steamid: string, setFriendList: (arg: null | userO
 const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
   const [friendList, setFriendList] = React.useState<userObj[] | null>(null);
   const [showMoreFriends, setShowMoreFriends] = React.useState<boolean>(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     if (!steamUser) return;
@@ -82,7 +86,9 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
           {friendList.length !== 0 &&
             <>
               {friendList.map(el => {
-                return <div title={el.personaname} key={uuid4()} className="friend-list-box-container">
+                return <div onClick={() => {
+                  router.push(`/user/${el.steamid}`);
+                }} title={el.personaname} key={uuid4()} className="friend-list-box-container">
                   <div
                     style={{
                       backgroundImage: `url(${el.avatarfull})`,

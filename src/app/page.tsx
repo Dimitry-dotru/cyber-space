@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import Image from "next/image";
-import imgErrorPic from "../../public/img/error-img/unknown_game.jpg";
 import { userObj } from '../utils/types/steamTypes';
 import { getUser } from '../utils/functions/steamRequests';
 import { getSessionId } from '../utils/functions/authorization';

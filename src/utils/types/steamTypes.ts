@@ -1,4 +1,4 @@
-export type userObj = {
+export type nonRegUserObj = {
   avatar: string;
   avatarfull: string;
   avatarhash: string;
@@ -15,7 +15,9 @@ export type userObj = {
   profileurl: string;
   steamid: string;
   timecreated: number;
+};
 
+export type userObj = nonRegUserObj & {
   // my custom fields:
   userbanner: string;
   userbgpattern: string;

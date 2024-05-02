@@ -1,4 +1,4 @@
-import { userObj, achievementsForGame, countendAchievementsProps } from "../types/steamTypes";
+import { userObj, achievementsForGame, countendAchievementsProps, nonRegUserObj } from "../types/steamTypes";
 
 const getUser = async (sessionID: string) => {
   const data = await fetch(
@@ -10,6 +10,24 @@ const getUser = async (sessionID: string) => {
   const user: userObj = await data.json();
   return user;
 };
+
+const getUserFromSteam = async (steamid: number) => {
+  const data = await fetch(
+    `${process.env.backendAddress}/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${process.env.apiKey}&steamids=${steamid}`
+  );
+
+  if (!data.ok) {
+    return null;
+  }
+
+  const user: nonRegUserObj = await data.json();
+
+  console.log(user);
+  
+  return null;
+}
+
+const getUserFromDb = () => {};
 
 const getUsers = (
   steamids: string[],
@@ -66,4 +84,4 @@ const getAchievementsInfo = async (steamid: string, gameid: number) => {
   return gameAchivementsInfo;
 };
 
-export { getUser, getUsers, getAchievementsInfo };
+export { getUser, getUsers, getAchievementsInfo, getUserFromSteam };

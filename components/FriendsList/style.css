@@ -72,17 +72,8 @@
   border-radius: 5px;
   border: 1px solid var(--grey);
   background-position: center;
-  background-size: cover;
+  background-size: 105%;
 }
-
-/* .friend-list-box-container {
-  position: relative;
-  transition: .3s;
-}
-
-.friend-list-box-container:hover {
-  scale: 1.1;
-}*/
 
 .friend-list-box-info {
   position: absolute;
@@ -92,4 +83,8 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.friend-list-box-container {
+  cursor: pointer;
 }

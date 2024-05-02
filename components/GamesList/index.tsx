@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useMemo } from "react";
 import { userObj, gameObj, countendAchievementsProps } from "@/src/utils/types/steamTypes";
 import { getAchievementsInfo } from "@/src/utils/functions/steamRequests";
