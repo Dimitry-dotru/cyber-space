@@ -53,6 +53,10 @@ main {
   margin: 0 auto;
 }
 
+.container {
+  width: 100%;
+}
+
 @media (prefers-color-scheme: dark) {
 }
 
@@ -100,7 +104,7 @@ a {
 }
 
 .testing-block {
-  width: calc(100% - 100px);
+  /* width: calc(100% - 100px); */
   padding: 25px;
   margin: 0 auto;
   background-color: var(--main-color-opacity);
@@ -113,6 +117,8 @@ a {
   align-items: center;
   /* justify-content: center; */
   flex-direction: column;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .lists {

@@ -11,6 +11,7 @@ import Header from '@/components/Header';
 import FriendsList from '@/components/FriendsList';
 import GamesList from '@/components/GamesList';
 import UserBanner from '@/components/UserBanner';
+import ShareYourThoughts from '@/components/ShareYourThoughts';
 
 
 export default function Home() {
@@ -39,10 +40,14 @@ export default function Home() {
       <Header steamUser={steamUser} setSteamUser={setSteamUser} />
       <UserBanner steamUser={steamUser} />
       <main>
-        <div className="testing-block">
-        
+        <div className="container">
+          <ShareYourThoughts steamUser={steamUser} />
+          <div className="testing-block ">
+          </div>
 
         </div>
+
+
 
         <aside>
           <FriendsList steamUser={steamUser} />
