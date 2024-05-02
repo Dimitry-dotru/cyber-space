@@ -23,7 +23,7 @@ export default function Home() {
       const data = await getUser(sessionID);
       setSteamUser(data);
       if (data) {
-        document.body.style.backgroundImage = `url(${data.userbgpattern})`;
+        document.body.style.backgroundImage = `url(${data.cyberspace_settings.public.userbgpattern})`;
       }
       window.localStorage.setItem("sessionID", sessionID!);
     }
@@ -35,7 +35,7 @@ export default function Home() {
   return (
     <>
       <Header steamUser={steamUser} setSteamUser={setSteamUser} />
-      <UserBanner steamUser={steamUser} />
+      <UserBanner avatarfull={steamUser ? steamUser.avatarfull : null} userbanner={steamUser ? steamUser.cyberspace_settings.public.userbanner : null}  />
       <main>
         <div className="container">
           <ShareYourThoughts steamUser={steamUser} />

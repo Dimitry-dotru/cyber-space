@@ -15,12 +15,19 @@ export type nonRegUserObj = {
   profileurl: string;
   steamid: string;
   timecreated: number;
+
+  cyberspace_settings: {
+    public: {
+      userbanner: string;
+      userbgpattern: string;
+    };
+  };
 };
 
 export type userObj = nonRegUserObj & {
-  // my custom fields:
-  userbanner: string;
-  userbgpattern: string;
+  cyberspace_settings: {
+    private: {}
+  };
 };
 
 export type friendObj = {
