@@ -23,7 +23,7 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
       .then(d => {
         const gamesArr = d.response.games as gameObj[];
         gamesArr.sort((a, b) => {
-          
+
           const nameA = a.name.toUpperCase();
           const nameB = b.name.toUpperCase();
 
@@ -56,11 +56,11 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
       {!steamUser && <span style={{ alignSelf: "flex-start" }}>Authorise to see your friends!</span>}
 
       {/* {steamUser && <> */}
-        {/* если авторизован, но пока нету данных о играх, отобразить загрузку */}
-        {!gamesList && steamUser && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
-        {/* и когда игры были получены, выводим их */}
-        {gamesElements}
-        {/* {gamesList && <>
+      {/* если авторизован, но пока нету данных о играх, отобразить загрузку */}
+      {!gamesList && steamUser && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
+      {/* и когда игры были получены, выводим их */}
+      {gamesElements}
+      {/* {gamesList && <>
           {!gamesList.length && "You haven’t games yet..."}
           {gamesList.length &&
             gamesList.map(el => {
@@ -96,6 +96,8 @@ const getLastTimePlayed = (seconds: number) => {
   const diffDays = Math.floor(Math.abs(date - currentDate) / (1000 * 60 * 60 * 24));
 
   switch (true) {
+    case seconds === 0:
+      return "Never";
     case diffDays < 1:
       return "Today";
     case diffDays === 1:
@@ -111,9 +113,8 @@ const GameElement: React.FC<GameElementProps> = ({ steamid, gameListEl }) => {
   const [achievements, setAchievements] = React.useState<null | countendAchievementsProps>(null);
 
   const mathHours = gameListEl.playtime_forever / 60;
-  const totalPlayTime = mathHours <= 1 ? `${mathHours.toFixed(2)} min` : `${Math.ceil(mathHours)}h`;
+  const totalPlayTime = mathHours < 1 ? `${mathHours.toFixed(2)} min` : `${Math.ceil(mathHours)}h`;
   const lastPlayed = getLastTimePlayed(gameListEl.rtime_last_played);
-
 
   React.useEffect(() => {
     const func = async () => {
