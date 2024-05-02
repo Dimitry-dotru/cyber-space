@@ -120,7 +120,7 @@ const GameElement: React.FC<GameElementProps> = ({ steamid, gameListEl }) => {
 
   React.useEffect(() => {
     const func = async () => {
-      const data = await getAchievementsInfo(steamid, gameListEl.appid);
+      const data = await getAchievementsInfo(steamid, gameListEl);
       setAchievements(data);
     }
     func();

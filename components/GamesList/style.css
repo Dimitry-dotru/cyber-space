@@ -1,5 +1,5 @@
 .games-list-container {
-  --games-list-element-height: 80px;
+  --games-list-element-height: 90px;
   --games-list-element-width: 100%;
   --games-list-element-gap: 20px;
   --games-list-rows: 5;
@@ -37,7 +37,7 @@
   /* width: var(--friend-list-width); */
   gap: var(--gap);
   flex-wrap: wrap;
-  max-height: 530px;
+  max-height: calc((var(--games-list-element-height) + var(--games-list-element-gap)) * var(--games-list-rows) - var(--games-list-element-gap));
   /* max-height: var(--friend-list-max-height); */
   overflow-y: hidden;
   overflow-x: hidden;
@@ -75,8 +75,8 @@
 }
 
 .games-list-blocks img {
-  width: 90px;
-  height: 90px;
+  width: var(--games-list-element-height);
+  height: var(--games-list-element-height);
   border-radius: 5px;
   border: 1px solid var(--grey);
 }
@@ -87,7 +87,7 @@
 }
 
 .games-block-description {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--primary-color);
 }
 
