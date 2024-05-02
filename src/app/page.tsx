@@ -35,7 +35,7 @@ export default function Home() {
   return (
     <>
       <Header steamUser={steamUser} setSteamUser={setSteamUser} />
-      <UserBanner avatarfull={steamUser ? steamUser.avatarfull : null} userbanner={steamUser ? steamUser.cyberspace_settings.public.userbanner : null}  />
+      <UserBanner avatar={steamUser ? steamUser.avatarfull : null} userbanner={steamUser ? steamUser.cyberspace_settings.public.userbanner : null}  />
       <main>
         <div className="container">
           <ShareYourThoughts steamUser={steamUser} />

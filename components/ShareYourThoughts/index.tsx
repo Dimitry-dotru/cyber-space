@@ -11,7 +11,7 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
 
   return <div className="posts-container">
     <div className="input-logo-container">
-      <img src={steamUser ? steamUser.avatarfull : userLogo.src} className="profile-picture" />
+      <img src={steamUser ? steamUser.avatarmedium : userLogo.src} className="profile-picture" />
       <input disabled={!steamUser} type="text" id="searchInput" placeholder={steamUser ? "Share Your Thoughts...": "You can't share your thoughts yet!"} />
     </div>
     <span className="material-symbols-outlined">edit</span>

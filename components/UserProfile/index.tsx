@@ -20,7 +20,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ setSteamUser, steamUser }) =>
 
   return <div className="user-profile">
     <div onClick={toggleOpen} className="user-logo-container">
-      <Image alt="user logo" width={60} height={60} src={steamUser ? steamUser.avatarfull : userLogo} />
+      <Image alt="user logo" width={60} height={60} src={steamUser ? steamUser.avatarmedium : userLogo} />
       <div className="user-triangle" style={{ "rotate": isOpen ? "0deg" : "180deg" }}></div>
     </div>
 

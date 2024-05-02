@@ -91,7 +91,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
                 }} title={el.personaname} key={uuid4()} className="friend-list-box-container">
                   <div
                     style={{
-                      backgroundImage: `url(${el.avatarfull})`,
+                      backgroundImage: `url(${el.avatarmedium})`,
                     }}
                     className="friend-list-box">
 
