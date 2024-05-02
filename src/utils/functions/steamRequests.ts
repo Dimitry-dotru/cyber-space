@@ -3,6 +3,7 @@ import {
   achievementsForGame,
   countendAchievementsProps,
   gameObj,
+  nonRegUserObj
 } from "../types/steamTypes";
 
 const getUser = async (sessionID: string) => {
