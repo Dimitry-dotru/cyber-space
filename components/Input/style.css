@@ -1,11 +1,11 @@
 .search-input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #2f324e;
+  border: 1px solid var(--main-color);
   border-radius: 5px;
   outline: none;
-  color: #797e93;
-  background-color: #2f324e;
+  color: var(--primary-color);
+  background-color: var(--main-color);
   font-size: 24px;
 }
 .search-input-container {
@@ -16,5 +16,6 @@
   position: absolute;
   right: 15px;
   top: 50%;
+  color: var(--white-half);
   transform: translateY(-50%);
 }

@@ -82,7 +82,7 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
           {friendList.length !== 0 &&
             <>
               {friendList.map(el => {
-                return <div key={uuid4()} className="friend-list-box-container">
+                return <div title={el.personaname} key={uuid4()} className="friend-list-box-container">
                   <div
                     style={{
                       backgroundImage: `url(${el.avatarfull})`,

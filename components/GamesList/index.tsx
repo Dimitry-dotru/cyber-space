@@ -18,7 +18,7 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
     if (!steamUser) {
       return;
     }
-    fetch(`${process.env.backendAddress}/steam/IPlayerService/GetOwnedGames/v0001/?key=${process.env.apiKey}&steamid=${steamUser.steamid}&format=json&include_appinfo=true`)
+    fetch(`${process.env.backendAddress}/steam/IPlayerService/GetOwnedGames/v0001/?key=${process.env.apiKey}&steamid=${steamUser.steamid}&format=json&include_appinfo=true&include_played_free_games=true`)
       .then(d => d.json())
       .then(d => {
         const gamesArr = d.response.games as gameObj[];
@@ -35,7 +35,7 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
           }
           return 0;
         });
-        if (gamesArr) {
+        if (gamesArr && !gamesElements.length) {
           gamesArr.map(el => {
             gamesElements.push(<GameElement key={uuid4()} steamid={steamUser.steamid} gameListEl={el} />);
             setGamesElements([...gamesElements]);
@@ -57,7 +57,7 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
 
       {/* {steamUser && <> */}
         {/* если авторизован, но пока нету данных о играх, отобразить загрузку */}
-        {!gamesList && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
+        {!gamesList && steamUser && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
         {/* и когда игры были получены, выводим их */}
         {gamesElements}
         {/* {gamesList && <>

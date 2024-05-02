@@ -18,6 +18,10 @@
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.30)
 }
 
+.games-list-container .see-more-btn {
+  text-align: end;
+}
+
 .games-list-container h3 {
   display: flex;
   gap: 5px;
