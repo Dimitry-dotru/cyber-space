@@ -13,7 +13,7 @@ interface GamesListProps {
 
 const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
   const [showMoreGames, setShowMoreGames] = React.useState(false);
-  const [gamesList, setGamesList] = React.useState<null | gameObj[]>(null);
+  const [gamesList, setGamesList] = React.useState<null | gameObj[] | undefined>(null);
   const [gamesElements, setGamesElements] = React.useState<React.ReactNode[]>([]);
 
   React.useEffect(() => {
@@ -23,6 +23,11 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
     fetch(`${process.env.backendAddress}/steam/IPlayerService/GetOwnedGames/v0001/?key=${process.env.apiKey}&steamid=${steamUser.steamid}&format=json&include_appinfo=true&include_played_free_games=true`)
       .then(d => d.json())
       .then(d => {
+        const data = d.response;
+        if (!data.games) {
+          setGamesList(undefined);
+          return;
+        }
         const gamesArr = d.response.games as gameObj[];
         gamesArr.sort((a, b) => {
 
@@ -38,8 +43,18 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
           return 0;
         });
         if (gamesArr && !gamesElements.length) {
-          gamesArr.map(el => {
-            gamesElements.push(<GameElement key={uuid4()} steamid={steamUser.steamid} gameListEl={el} />);
+          gamesArr.map(async (el, idx) => {
+            // if (idx === 0) {
+            //   const data = await fetch(
+            //     `${process.env.backendAddress}/steam/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${el.appid}&key=${process.env.apiKey}&steamid=${steamUser.steamid}`
+            //   );
+
+            //   console.log(data);
+              // тут нужно попробовать послать запрос на бек, а оттуда послать запрос на стим, как
+              // авторизованный пользователь
+              // console.log(await getAchievementsInfo(steamUser.steamid, el, false));
+            // }
+            gamesElements.push(<GameElement hiddenAchievements={false} key={uuid4()} steamid={steamUser.steamid} gameListEl={el} />);
             setGamesElements([...gamesElements]);
           });
         }
@@ -59,7 +74,7 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
 
       {/* {steamUser && <> */}
       {/* если авторизован, но пока нету данных о играх, отобразить загрузку */}
-      {!gamesList && steamUser && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
+      {!gamesList && steamUser && gamesList !== undefined && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
       {/* и когда игры были получены, выводим их */}
       {gamesElements}
       {/* {gamesList && <>
@@ -83,12 +98,16 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
       className="see-more-btn">
       {showMoreGames ? "Show less..." : "See more..."}
     </div>}
+
+    {gamesList === undefined && <span style={{ alignSelf: "flex-start" }}>Games are hidden for this user</span>}
+
   </div>
 }
 
 interface GameElementProps {
   steamid: string;
   gameListEl: gameObj;
+  hiddenAchievements: boolean;
 }
 
 const getLastTimePlayed = (seconds: number) => {
@@ -98,6 +117,8 @@ const getLastTimePlayed = (seconds: number) => {
   const diffDays = Math.floor(Math.abs(date - currentDate) / (1000 * 60 * 60 * 24));
 
   switch (true) {
+    case seconds === undefined:
+      return "Hidden";
     case seconds === 0:
       return "Never";
     case diffDays < 1:
@@ -111,7 +132,7 @@ const getLastTimePlayed = (seconds: number) => {
   }
 }
 
-const GameElement: React.FC<GameElementProps> = ({ steamid, gameListEl }) => {
+const GameElement: React.FC<GameElementProps> = ({ steamid, gameListEl, hiddenAchievements }) => {
   const [achievements, setAchievements] = React.useState<null | countendAchievementsProps>(null);
 
   const mathHours = gameListEl.playtime_forever / 60;
@@ -120,7 +141,7 @@ const GameElement: React.FC<GameElementProps> = ({ steamid, gameListEl }) => {
 
   React.useEffect(() => {
     const func = async () => {
-      const data = await getAchievementsInfo(steamid, gameListEl);
+      const data = await getAchievementsInfo(steamid, gameListEl, hiddenAchievements);
       setAchievements(data);
     }
     func();

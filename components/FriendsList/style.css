@@ -49,6 +49,7 @@
 
 .friend-list {
   display: flex;
+  width: 100%;
   gap: var(--gap);
   flex-wrap: wrap;
   padding: var(--friends-list-top-padding) var(--friends-list-side-paddings);
