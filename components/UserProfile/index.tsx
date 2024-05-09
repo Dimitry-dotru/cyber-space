@@ -20,7 +20,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ setSteamUser, steamUser }) =>
 
   return <div className="user-profile">
     <div onClick={toggleOpen} className="user-logo-container">
-      <Image alt="user logo" width={60} height={60} src={steamUser ? steamUser.avatarfull : userLogo} />
+      <Image alt="user logo" width={60} height={60} src={steamUser ? steamUser.avatarmedium : userLogo} />
       <div className="user-triangle" style={{ "rotate": isOpen ? "0deg" : "180deg" }}></div>
     </div>
 
@@ -30,8 +30,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ setSteamUser, steamUser }) =>
         <a href="/settings"><li><span className="material-symbols-outlined">settings</span>Settings</li></a>
         <hr className="separate-line" />
         <a
-          onClick={() => {
-            if (steamUser) logoutHandler(setSteamUser);
+          onClick={(e) => {
+            if (steamUser) {
+              e.preventDefault();
+              logoutHandler(setSteamUser);
+            }
           }}
           href={`${steamUser ? "" : process.env.backendAddress + "/api/auth/steam"}`}>
 

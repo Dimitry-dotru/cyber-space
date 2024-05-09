@@ -4,6 +4,7 @@ import Image from "next/image";
 import logo from "../../public/img/logo.png";
 
 import UserProfile from "@/components/UserProfile";
+import Input from "../Input";
 
 import { userObj } from "@/src/utils/types/steamTypes";
 
@@ -17,10 +18,9 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <header className="header">
-      <div>
-        <a href="/">
-          <Image src={logo} alt="Logo" />
-        </a>
+      <div className="d-flex items-center logo-container">
+        <Image src={logo} alt="Logo" />
+        <Input/>
       </div>
       <div className="container-navigate">
         <div className="navigate">

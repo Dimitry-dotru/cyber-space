@@ -1,50 +1,33 @@
 "use client"
 import { userObj } from "@/src/utils/types/steamTypes"
-import React from 'react';
-import Image from 'next/image';
-import bunner from '@/public/img/default-imgs/banner_default.webp'
-import avatar from '@/public/img/default-imgs/non_authorised_user.png'
-import edit_banner from '@/public/img/default-imgs/edit_banner.svg'
+import React from "react";
+import Image from "next/image";
+import bannerDefault from "@/public/img/default-imgs/banner_default.webp"
+import avatarDefault from "@/public/img/default-imgs/non_authorised_user.png"
 import "./style.css";
 
 interface UserBannerProps {
-  // null - значит что пользователь еще не авторизован, значит нужно отобразить дефолтную картинку баннера
-  // и дефолтный аватар
-  // дефолтный баннер: public/img/default-imgs/banner_default.webp
-  // дефолтный аватар: public/img/default-imgs/non_authorised_user.png
-  steamUser: userObj | null;
+  userbanner: string | null;
+  avatar: string | null;
 }
 
 const UserBanner: React.FC<UserBannerProps> = ({
-  steamUser
+  avatar, userbanner
 }) => {
-  const userBanner = steamUser ? steamUser.userbanner : "/img/default-imgs/banner_default.webp";
   const handleEditClick = () => {
-    // Обработчик клика по кнопке редактирования
-    console.log("Edit button clicked");
+    // console.log("Edit button clicked");
   };
-  // тут твой код дальше
   return <>
-    <div className="image-container">
-      <Image src={bunner}  alt="Banner" className="banner" />
-      <Image src={steamUser ? steamUser.avatarfull : "/img/default-imgs/non_authorised_user.png"} width={250} height={250} alt="Avatar" className="avatar" />
-      <button className="edit-button"  onClick={handleEditClick}>
-      <Image src={edit_banner}  alt="edit banner" className="edit-icon"></Image>
+    <div className="banner-container">
+      <img width={100} height={100} src={userbanner ? userbanner : bannerDefault.src} alt="Banner" className="banner" />
+      <Image src={avatar ? avatar : avatarDefault} width={250} height={250} alt="Avatar" className="avatar" />
+      <button className="edit-button" onClick={handleEditClick}>
+        <div className="edit-box-circle">
+          <span className="material-symbols-outlined">edit</span>
+        </div>
       </button>
     </div>
   </>
-
-
-  // в будущем, в steamUser будет поле userbanner, в котором и будет путь к картинке нужной
-  // а пока, сделай переменную userBanner, которой ты присвоишь дефолтную картинку баннера, чтобы я потом простенько
-  // это все заменил
-}
-
-// это будет вот этот синий карандашик: https://prnt.sc/DbQ7z4U7GGBM
-const EditBanner: React.FC = () => {
-  return <>
-
-  </>;
 }
 
 export default UserBanner;

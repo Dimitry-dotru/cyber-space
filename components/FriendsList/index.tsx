@@ -1,4 +1,7 @@
+"use client"
+
 import React from "react";
+import { useRouter } from "next/navigation";
 import { v4 as uuid4 } from "uuid";
 
 import "./style.css";
@@ -12,10 +15,15 @@ interface FriendsListProps {
   steamUser: userObj | null;
 }
 
-async function getFriendsList(steamid: string, setFriendList: (arg: null | userObj[]) => void) {
+async function getFriendsList(steamid: string, setFriendList: (arg: undefined | null | userObj[]) => void) {
   const data = await fetch(`${backendAddress}/steam/ISteamUser/GetFriendList/v0001/?key=${apiKey}&steamid=${steamid}&relationship=friend`);
 
-  const friendList = (await data.json()).friendslist.friends as friendObj[];
+  const responseObj = await (data.json());
+  if (!responseObj.friendslist) {
+    setFriendList(undefined);
+    return;
+  }
+  const friendList = responseObj.friendslist.friends as friendObj[];
   const pairsAmnt = Math.ceil(friendList.length / 100);
   const allUsers: userObj[] = [];
 
@@ -30,47 +38,63 @@ async function getFriendsList(steamid: string, setFriendList: (arg: null | userO
     })
   }
 
+  // sort by alphabet...
+  allUsers.sort((a, b) => {
+    const nameA = a.personaname.toUpperCase();
+    const nameB = b.personaname.toUpperCase();
+
+    if (nameA > nameB) {
+      return -1;
+    }
+    if (nameA < nameB) {
+      return 1;
+    }
+    return 0;
+  });
+
   setFriendList(allUsers);
 }
 
 const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
-  const [friendList, setFriendList] = React.useState<userObj[] | null>(null);
+  const [friendList, setFriendList] = React.useState<userObj[] | null| undefined>(null);
   const [showMoreFriends, setShowMoreFriends] = React.useState<boolean>(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     if (!steamUser) return;
-    fetch(`${backendAddress}/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamUser.steamid}`)
-      .then(d => d.json())
-      .then(d => {
-        const steamid = d.response.players[0].steamid;
-        getFriendsList(steamid, setFriendList);
-      })
+    getFriendsList(steamUser.steamid, setFriendList);
+
+    fetch(`${backendAddress}/user-friends/${steamUser.steamid}/?sessionID=${window.localStorage.getItem("sessionID")}`);
   }, [steamUser]);
 
 
   return <div className="friends-list-container">
     <h3>
       <span className="material-symbols-outlined">group</span>
-      Friends
+      Friends {friendList && friendList.length && <>({friendList.length})</>}
     </h3>
-
     <div className={`friend-list ${showMoreFriends ? "open" : ""}`}>
       {/* если не авторизован, то вывести сообщение чтобы авторизовался */}
       {!steamUser && <span style={{ alignSelf: "flex-start" }}>Authorise to see your friends!</span>}
 
       {steamUser && <>
         {/* если авторизован, но пока нету данных о друзьях, отобразить загрузку */}
-        {!friendList && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
+        {!friendList && friendList !== undefined && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
+        {/* если у профиля стоит private в настройках профиля */}
+        {friendList === undefined && "This account has private profile settings!"}
         {/* и когда друзья были получены, выводим их */}
-        {friendList && <>
+        {friendList && friendList !== undefined && <>
+          {/* если уже так получилось что друзей нету */}
           {!friendList.length && "You haven’t friends yet..."}
           {friendList.length !== 0 &&
             <>
               {friendList.map(el => {
-                return <div key={uuid4()} className="friend-list-box-container">
+                return <div onClick={() => {
+                  router.push(`/user/${el.steamid}`);
+                }} title={el.personaname} key={uuid4()} className="friend-list-box-container">
                   <div
                     style={{
-                      backgroundImage: `url(${el.avatarfull})`,
+                      backgroundImage: `url(${el.avatarmedium})`,
                     }}
                     className="friend-list-box">
 
@@ -86,7 +110,11 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
       </>}
     </div>
     {friendList && friendList.length > 12 && <div
-      onClick={() => {
+      onClick={(e) => {
+        if (showMoreFriends) {
+          const friendListDiv = (e.target as HTMLDivElement).previousElementSibling;
+          friendListDiv!.scrollTop = 0;
+        }
         setShowMoreFriends(!showMoreFriends);
       }}
       className="see-more-btn">
