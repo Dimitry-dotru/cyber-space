@@ -63,6 +63,8 @@ const getAchievementsInfo = async (steamid: string, game: gameObj, hiddenAchieve
     `${process.env.backendAddress}/steam/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${game.appid}&key=${process.env.apiKey}&steamid=${steamid}`
   );
 
+  if (!data.ok) return null;
+
   const gamesAchievements = (await data.json())
     .playerstats as achievementsForGame;
 

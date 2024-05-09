@@ -43,18 +43,18 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
           return 0;
         });
         if (gamesArr && !gamesElements.length) {
+          let isHiddenAchievements = false;
           gamesArr.map(async (el, idx) => {
-            // if (idx === 0) {
-            //   const data = await fetch(
-            //     `${process.env.backendAddress}/steam/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${el.appid}&key=${process.env.apiKey}&steamid=${steamUser.steamid}`
-            //   );
-
-            //   console.log(data);
-              // тут нужно попробовать послать запрос на бек, а оттуда послать запрос на стим, как
-              // авторизованный пользователь
-              // console.log(await getAchievementsInfo(steamUser.steamid, el, false));
-            // }
-            gamesElements.push(<GameElement hiddenAchievements={false} key={uuid4()} steamid={steamUser.steamid} gameListEl={el} />);
+            // проверяем запрос по первому элементу, и если статус ответа 403, то есть отказано в доступе, то запрещаем отправлять
+            if (idx === 0) {
+              const data = await fetch(
+                `${process.env.backendAddress}/steam/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${el.appid}&key=${process.env.apiKey}&steamid=${steamUser.steamid}`
+              );
+              if (data.status === 403) {
+                isHiddenAchievements = true;
+              }
+            }
+            gamesElements.push(<GameElement hiddenAchievements={isHiddenAchievements} key={uuid4()} steamid={steamUser.steamid} gameListEl={el} />);
             setGamesElements([...gamesElements]);
           });
         }
