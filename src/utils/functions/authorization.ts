@@ -34,4 +34,17 @@ const getSessionId = (): null | string => {
   return sessionID;
 };
 
-export { logoutHandler, getSessionId };
+const authOperation = async (
+  setSteamUser: (arg: userObj | null) => void
+) => {
+  const sessionID = getSessionId();
+  if (!sessionID) return;
+  const data = await getUser(sessionID);
+  setSteamUser(data);
+  if (data) {
+    document.body.style.backgroundImage = `url(${data.cyberspace_settings.public.userbgpattern})`;
+  }
+  window.localStorage.setItem("sessionID", sessionID!);
+};
+
+export { logoutHandler, getSessionId, authOperation };

@@ -1,4 +1,4 @@
-export type userObj = {
+export type nonRegUserObj = {
   avatar: string;
   avatarfull: string;
   avatarhash: string;
@@ -16,9 +16,18 @@ export type userObj = {
   steamid: string;
   timecreated: number;
 
-  // my custom fields:
-  userbanner: string;
-  userbgpattern: string;
+  cyberspace_settings: {
+    public: {
+      userbanner: string;
+      userbgpattern: string;
+    };
+  };
+};
+
+export type userObj = nonRegUserObj & {
+  cyberspace_settings: {
+    private: {}
+  };
 };
 
 export type friendObj = {

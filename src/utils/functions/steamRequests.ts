@@ -3,6 +3,7 @@ import {
   achievementsForGame,
   countendAchievementsProps,
   gameObj,
+  nonRegUserObj,
 } from "../types/steamTypes";
 
 const getUser = async (sessionID: string) => {
@@ -13,6 +14,18 @@ const getUser = async (sessionID: string) => {
   if (!data.ok) return null;
 
   const user: userObj = await data.json();
+  return user;
+};
+
+const getUserFromDb = async (steamid: number) => {
+  const data = await fetch(`${process.env.backendAddress}/user/${steamid}`);
+
+  if (!data.ok) {
+    return null;
+  }
+
+  const user: userObj = await data.json();
+
   return user;
 };
 
@@ -34,7 +47,7 @@ const getUsers = (
     });
 };
 
-const getAchievementsInfo = async (steamid: string, game: gameObj) => {
+const getAchievementsInfo = async (steamid: string, game: gameObj, hiddenAchievements: boolean) => {
   const gameAchivementsInfo: countendAchievementsProps = {
     totalAchievements: 0,
     completed: 0,
@@ -43,7 +56,8 @@ const getAchievementsInfo = async (steamid: string, game: gameObj) => {
     hasAchievements: !!game.has_community_visible_stats,
   };
 
-  if (!gameAchivementsInfo.hasAchievements) return null;
+  if (!gameAchivementsInfo.hasAchievements || hiddenAchievements)
+    return null;
 
   const data = await fetch(
     `${process.env.backendAddress}/steam/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${game.appid}&key=${process.env.apiKey}&steamid=${steamid}`
@@ -75,4 +89,4 @@ const getAchievementsInfo = async (steamid: string, game: gameObj) => {
   return gameAchivementsInfo;
 };
 
-export { getUser, getUsers, getAchievementsInfo };
+export { getUser, getUsers, getAchievementsInfo, getUserFromDb };
