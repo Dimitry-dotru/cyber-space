@@ -24,14 +24,12 @@
 .edit-button {
   position: absolute;
   top: 20px;
-  right: 0px;
+  right: 40px;
   background: none;
   border: none;
   cursor: pointer;
 }
 .edit-box-circle {
-  margin-top: 20px;
-  margin-right: 40px;
   background-color: var(--blue);
   border-radius: 50px;
   width: 40px;

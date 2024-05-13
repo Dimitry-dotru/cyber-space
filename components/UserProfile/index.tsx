@@ -36,7 +36,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ setSteamUser, steamUser }) =>
         }}> <li><span className="material-symbols-outlined">account_circle</span>Profile</li></a>
         <a onClick={(e) => {
           e.preventDefault();
-          router.push("/settings/user-profile")
+          router.push("/settings")
         }}><li><span className="material-symbols-outlined">settings</span>Settings</li></a>
         <hr className="separate-line" />
         <a
