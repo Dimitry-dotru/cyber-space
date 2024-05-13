@@ -13,6 +13,7 @@
   --main-color: #2f324e;
   --main-color-opacity: #2f324e99;
   --primary-color: #797e93;
+  --primary-color-opacity: #797e9333;
   --dark-grey: #333;
   --grey: #545873;
 
@@ -96,11 +97,19 @@ a {
   text-decoration: none;
 }
 
-.btn-secondary {
+.btn {
   padding: 12.5px 25px;
   font-size: 18px;
-  background-color: var(--primary-color);
   border-radius: 5px;
+  display: block;
+}
+
+.btn-secondary {
+  background-color: var(--primary-color);
+}
+
+.btn-primary {
+  background-color: var(--blue);
 }
 
 .testing-block {
@@ -253,6 +262,10 @@ a {
   cursor: pointer;
 }
 
+.p-25 {
+  padding: 25px;
+}
+
 .gap-5 {
   display: flex;
   gap: 5px;
@@ -281,4 +294,15 @@ a {
 
 .items-center {
   align-items: center;
+}
+
+.block-primary-rounded {
+  background-color: var(--main-color-opacity);
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+}
+
+.block-primary {
+  background-color: var(--main-color-opacity);
+  border: 1px solid var(--primary-color);
 }

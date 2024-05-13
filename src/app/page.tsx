@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
-import { userObj } from '../utils/types/steamTypes';
-import { getUser } from '../utils/functions/steamRequests';
-import { authOperation } from '../utils/functions/authorization';
+import { userObj } from "../utils/types/steamTypes";
+import { getUser } from "../utils/functions/steamRequests";
+import { authOperation } from "../utils/functions/authorization";
 
-import Header from '@/components/Header';
-import FriendsList from '@/components/FriendsList';
-import GamesList from '@/components/GamesList';
-import UserBanner from '@/components/UserBanner';
-import ShareYourThoughts from '@/components/ShareYourThoughts';
+import Header from "@/components/Header";
+import FriendsList from "@/components/FriendsList";
+import GamesList from "@/components/GamesList";
+import UserBanner from "@/components/UserBanner";
+import ShareYourThoughts from "@/components/ShareYourThoughts";
 
 
 export default function Home() {

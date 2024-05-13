@@ -1,4 +1,7 @@
+"use client"
+
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import userLogo from "@/public/img/default-imgs/non_authorised_user.png";
 import "./style.css";
@@ -13,6 +16,7 @@ interface UserProfileProps {
 
 const UserProfile: React.FC<UserProfileProps> = ({ setSteamUser, steamUser }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -26,8 +30,14 @@ const UserProfile: React.FC<UserProfileProps> = ({ setSteamUser, steamUser }) =>
 
     <div className={`user-dropdown ${isOpen ? "open" : ""}`}>
       <ul className="user-dropdown-container">
-        <a href="/"> <li><span className="material-symbols-outlined">account_circle</span>Profile</li></a>
-        <a href="/settings"><li><span className="material-symbols-outlined">settings</span>Settings</li></a>
+        <a onClick={(e) => {
+          e.preventDefault();
+          router.push("/");
+        }}> <li><span className="material-symbols-outlined">account_circle</span>Profile</li></a>
+        <a onClick={(e) => {
+          e.preventDefault();
+          router.push("/settings/user-profile")
+        }}><li><span className="material-symbols-outlined">settings</span>Settings</li></a>
         <hr className="separate-line" />
         <a
           onClick={(e) => {
