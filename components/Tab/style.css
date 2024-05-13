@@ -52,6 +52,6 @@
 .tab-content {
   overflow: hidden;
   max-height: 0;
-  transition: .3s;
+  transition: .5s;
   padding-left: 25px;
 }

@@ -1,3 +1,15 @@
+form {
+  width: 100%;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.file-input-label {
+  cursor: pointer;
+}
+
 .page-title {
   display: flex;
   gap: 5px;
@@ -44,4 +56,15 @@
 
 .input-container img {
   border-radius: 100%;
+}
+
+.file-input-container {
+  flex-direction: column;
+  width: 180px;
+  align-items: flex-start;
+}
+
+.file-input-container img {
+  width: 130px;
+  height: 130px;
 }

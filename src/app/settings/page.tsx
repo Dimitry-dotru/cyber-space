@@ -11,15 +11,14 @@ import Button from "@/components/Button";
 
 import "./style.css";
 
-interface PageProps {
-  params: {
-    settingTab: string;
-  };
-}
-
-const Page = ({ params }: PageProps) => {
+const Page = () => {
   const [steamUser, setSteamUser] = React.useState<userObj | null>(null);
   const [settingTab, setSettingTab] = React.useState<string>(window.location.hash.substring(1));
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(e);
+  }
 
   React.useEffect(() => {
     const asyncFunc = async (
@@ -56,41 +55,34 @@ const Page = ({ params }: PageProps) => {
         <span className="material-symbols-outlined">settings</span>
         Settings
       </h3>
-      <div className="settings-content">
-        <div className="settings-body">
-          {steamUser && <>
-            <Tab title="User profile" openedTab={settingTab} uniqueName="user-profile">
-              <p className="input-title">Change avatar</p>
-              <div className="input-container">
-                <Image width={100} height={100} alt="User avatar" src={steamUser.avatarfull} />
-                <input type="file" />
-              </div>
-              <p className="input-title">Change avatar</p>
-              <div className="input-container">
-                <Image width={100} height={100} alt="User avatar" src={steamUser.avatarfull} />
-                <input type="file" />
-              </div>
-              <p className="input-title">Change avatar</p>
-              <div className="input-container">
-                <Image width={100} height={100} alt="User avatar" src={steamUser.avatarfull} />
-                <input type="file" />
-              </div>
-              <p className="input-title">Change avatar</p>
-              <div className="input-container">
-                <Image width={100} height={100} alt="User avatar" src={steamUser.avatarfull} />
-                <input type="file" />
-              </div>
-            </Tab>
-            <Tab title="Theme settings" openedTab={settingTab} uniqueName="theme">
-              Tab 2
-            </Tab>
-          </>}
+      <form onSubmit={submitHandler} onReset={() => window.location.reload()}>
+        <div className="settings-content">
+          <div className="settings-body">
+            {steamUser && <>
+              <Tab title="User profile" openedTab={settingTab} uniqueName="user-profile">
+                <p className="input-title">Change avatar</p>
+                <div className="input-container file-input-container">
+                  <label className="file-input-label" htmlFor="avatar-change">
+                    <Image width={100} height={100} alt="User avatar" src={steamUser.avatarfull} />
+                    <p>Change picture...</p>
+                  </label>
+                  <input accept="image/*" type="file" id="avatar-change" />
+                </div>
+                <div>
+
+                </div>
+              </Tab>
+              <Tab title="Theme settings" openedTab={settingTab} uniqueName="theme">
+                Tab 2
+              </Tab>
+            </>}
+          </div>
         </div>
-      </div>
-      <div className="buttons-container">
-        <Button textContent="Discard" type="reset" secondary />
-        <Button textContent="Save" type="submit" primary />
-      </div>
+        <div className="buttons-container">
+          <Button textContent="Discard" type="reset" secondary />
+          <Button textContent="Save" type="submit" primary />
+        </div>
+      </form>
     </main>
   </>;
 };
