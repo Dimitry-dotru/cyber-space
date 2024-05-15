@@ -18,7 +18,7 @@ const UserBanner: React.FC<UserBannerProps> = ({
     <div className="banner-container">
       <img src={userbanner ? userbanner : bannerDefault.src} alt="Banner" className="banner" />
       <a href="/settings#user-profile">
-        <Image src={avatar ? avatar : avatarDefault} width={250} height={250} alt="Avatar" className="avatar" />
+        <img src={avatar ? avatar : avatarDefault.src} width={250} height={250} alt="Avatar" className="avatar" />
       </a>
       <a href="/settings#theme" className="edit-button">
         <div className="edit-box-circle">

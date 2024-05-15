@@ -98,18 +98,61 @@ a {
 }
 
 .btn {
+  --bg-color: var(--primary-color);
+
   padding: 12.5px 25px;
   font-size: 18px;
   border-radius: 5px;
   display: block;
+  background: var(--bg-color);
+  cursor: pointer;
 }
 
 .btn-secondary {
-  background-color: var(--primary-color);
+  --bg-color: var(--primary-color);
 }
 
 .btn-primary {
-  background-color: var(--blue);
+  --bg-color: var(--blue);
+}
+
+.btn.btn-outlined {
+  background-color: transparent;
+  border: 1px solid var(--bg-color);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn.btn-outlined::after,
+.btn.btn-outlined::before {
+  content: "";
+  opacity: 1;
+  position: absolute;
+  width: 0px;
+  height: 100%;
+  display: block;
+  border-radius: 0%;
+  /* transform: translate(-50%, -50%); */
+  background-color: var(--bg-color);
+  transition: .4s;
+  z-index: -1;
+  top: 0;
+}
+
+.btn.btn-outlined::after {
+  left: 0;
+}
+
+.btn.btn-outlined::before {
+  right: 0;
+}
+
+.btn.btn-outlined:hover::after,
+.btn.btn-outlined:hover::before {
+  /* background-color: var(--bg-color); */
+  width: 100%;
+  /* height: 150%; */
 }
 
 .testing-block {
