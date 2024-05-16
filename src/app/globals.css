@@ -13,6 +13,7 @@
   --main-color: #2f324e;
   --main-color-opacity: #2f324e99;
   --primary-color: #797e93;
+  --primary-color-opacity: #797e9333;
   --dark-grey: #333;
   --grey: #545873;
 
@@ -96,11 +97,62 @@ a {
   text-decoration: none;
 }
 
-.btn-secondary {
+.btn {
+  --bg-color: var(--primary-color);
+
   padding: 12.5px 25px;
   font-size: 18px;
-  background-color: var(--primary-color);
   border-radius: 5px;
+  display: block;
+  background: var(--bg-color);
+  cursor: pointer;
+}
+
+.btn-secondary {
+  --bg-color: var(--primary-color);
+}
+
+.btn-primary {
+  --bg-color: var(--blue);
+}
+
+.btn.btn-outlined {
+  background-color: transparent;
+  border: 1px solid var(--bg-color);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn.btn-outlined::after,
+.btn.btn-outlined::before {
+  content: "";
+  opacity: 1;
+  position: absolute;
+  width: 0px;
+  height: 100%;
+  display: block;
+  border-radius: 0%;
+  /* transform: translate(-50%, -50%); */
+  background-color: var(--bg-color);
+  transition: .4s;
+  z-index: -1;
+  top: 0;
+}
+
+.btn.btn-outlined::after {
+  left: 0;
+}
+
+.btn.btn-outlined::before {
+  right: 0;
+}
+
+.btn.btn-outlined:hover::after,
+.btn.btn-outlined:hover::before {
+  /* background-color: var(--bg-color); */
+  width: 100%;
+  /* height: 150%; */
 }
 
 .testing-block {
@@ -239,7 +291,7 @@ a {
   width: 100%;
   border: none;
   outline: none;
-  height: 1px;
+  height: 2px;
   background-color: var(--primary-color);
 }
 
@@ -251,6 +303,10 @@ a {
 .see-more-btn:hover {
   text-decoration: underline;
   cursor: pointer;
+}
+
+.p-25 {
+  padding: 25px;
 }
 
 .gap-5 {
@@ -281,4 +337,15 @@ a {
 
 .items-center {
   align-items: center;
+}
+
+.block-primary-rounded {
+  background-color: var(--main-color-opacity);
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+}
+
+.block-primary {
+  background-color: var(--main-color-opacity);
+  border: 1px solid var(--primary-color);
 }

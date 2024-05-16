@@ -1,0 +1,122 @@
+form {
+  width: 100%;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.file-input-label {
+  cursor: pointer;
+}
+
+.page-title {
+  display: flex;
+  gap: 5px;
+  font-size: 28px;
+  align-items: center;
+  font-weight: 400;
+}
+
+.settings-page {
+  margin-top: 25px;
+  min-height: calc(100vh - 101px - 25px - 50px);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.settings-page .settings-content {
+  /* overflow-y: scroll; */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 25px;
+}
+
+.input-title {
+  margin-bottom: 10px;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 15px;
+}
+
+.input-container img {
+  border-radius: 100%;
+}
+
+.change-avatar-container {
+  width: min-content;
+}
+
+.crop-container {
+  --height: 500px;
+  --width: 500px;
+  position: relative;
+  width: var(--width);
+  height: var(--height);
+}
+
+.crop-container label {
+  width: var(--width);
+  height: var(--height);
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  cursor: pointer;
+}
+
+.crop-container.inactive {
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
+.crop-container.landscape {
+  --width: 700px;
+}
+
+.crop-container.portrait {
+  --height: 500px;
+  --width: 400px;
+}
+
+.crop-container img {
+  width: 100%;
+  max-width: var(--width);
+  height: auto;
+  object-fit: contain;
+}
+
+.crop-image-controls {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+  margin-top: 15px;
+}
+
+.zoom-btns {
+  display: flex;
+  gap: 5px;
+}
+
+.zoom-btns button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}

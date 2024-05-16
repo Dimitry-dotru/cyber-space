@@ -1,0 +1,58 @@
+.triangle-icon {
+  width: 0;
+  height: 0;
+  /* border-left: 5px solid transparent; */
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--white);
+  rotate: 180deg;
+  display: inline-block;
+}
+
+.tab-container.opened .triangle-icon {
+  rotate: 135deg;
+}
+
+.tab-title {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--white);
+  padding-bottom: 15px;
+  margin: 0 -15px;
+  padding-left: 15px;
+}
+
+.tab-title:hover {
+  color: var(--white-half);
+}
+
+.tab-container {
+  background-color: var(--primary-color-opacity);
+  padding: 12.5px 15px;
+  padding-bottom: 0;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  border: 1px solid var(--primary-color);
+  display: block;
+  cursor: default;
+}
+
+.tab-container.opened .tab-content {
+  padding-bottom: 15px;
+  padding-top: 15px;
+  max-height: 700px;
+  overflow-y: scroll;
+}
+
+.tab-container.opened .tab-title {
+  border-bottom: 1px solid var(--primary-color);
+}
+
+.tab-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: .5s;
+  padding-left: 25px;
+}

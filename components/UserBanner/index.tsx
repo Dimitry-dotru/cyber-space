@@ -14,18 +14,17 @@ interface UserBannerProps {
 const UserBanner: React.FC<UserBannerProps> = ({
   avatar, userbanner
 }) => {
-  const handleEditClick = () => {
-    // console.log("Edit button clicked");
-  };
   return <>
     <div className="banner-container">
-      <img width={100} height={100} src={userbanner ? userbanner : bannerDefault.src} alt="Banner" className="banner" />
-      <Image src={avatar ? avatar : avatarDefault} width={250} height={250} alt="Avatar" className="avatar" />
-      <button className="edit-button" onClick={handleEditClick}>
+      <img src={userbanner ? userbanner : bannerDefault.src} alt="Banner" className="banner" />
+      <a href="/settings#user-profile">
+        <img src={avatar ? avatar : avatarDefault.src} width={250} height={250} alt="Avatar" className="avatar" />
+      </a>
+      <a href="/settings#theme" className="edit-button">
         <div className="edit-box-circle">
           <span className="material-symbols-outlined">edit</span>
         </div>
-      </button>
+      </a>
     </div>
   </>
 }

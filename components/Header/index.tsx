@@ -19,8 +19,10 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header className="header">
       <div className="d-flex items-center logo-container">
-        <Image src={logo} alt="Logo" />
-        <Input/>
+        <a href="/">
+          <Image src={logo} alt="Logo" />
+        </a>
+        <Input />
       </div>
       <div className="container-navigate">
         <div className="navigate">
