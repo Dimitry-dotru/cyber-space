@@ -127,7 +127,7 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
       else setZoom(zoom - zoomStep);
     }
 
-    switch(operator) {
+    switch (operator) {
       case "+": increaseZoom(); break;
       case "-": decreaseZoom(); break;
     }
@@ -208,15 +208,18 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
 
     const res = await getCroppedImg(imgLink, cropedPixelParams);
 
-    fetch(`${process.env.backendAddress}/change-avatar/${steamUser!.steamid}`, {
+    fetch(`${process.env.backendAddress}/change-avatar/${steamUser!.steamid}?sessionID=${getSessionId() }`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ image: res })
+      body: JSON.stringify({ image: res.replace(/^data:image\/\w+;base64,/, "") })
     }).then(d => {
       if (d.ok) {
         window.location.reload();
+      }
+      else {
+        console.error(`Status: ${d.status}\nMessage:${d.statusText}`);
       }
     })
   }
@@ -250,8 +253,8 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
               <label htmlFor="toggle-grid-show">Show grid</label>
             </div>
             <div className="zoom-btns">
-                <Button disabled={!imgLink} secondary onClick={() => changeZoom("+")}>+</Button>
-                <Button disabled={!imgLink} secondary onClick={() => changeZoom("-")}>-</Button>
+              <Button disabled={!imgLink} secondary onClick={() => changeZoom("+")}>+</Button>
+              <Button disabled={!imgLink} secondary onClick={() => changeZoom("-")}>-</Button>
             </div>
           </div>
         }
@@ -260,6 +263,12 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
             Change picture
             <input onChange={handleFileChange} accept="image/*" type="file" style={{ display: "none" }} id="avatar-change" />
           </label>
+          <Button primary outlined onClick={() => {
+              fetch(`${process.env.backendAddress}/restore-avatar/${steamUser!.steamid}?sessionID=${getSessionId()}`, { method: "post" })
+              .then(d => {
+                if (d.ok) window.location.reload();
+              })
+          }}>Return steam avatar</Button>
           {imgLink &&
             <Button disabled={!imgLink} type="submit" primary outlined>Save</Button>
           }

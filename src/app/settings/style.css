@@ -63,8 +63,8 @@ input[type="file"] {
 }
 
 .crop-container {
-  --height: 300px;
-  --width: 300px;
+  --height: 500px;
+  --width: 500px;
   position: relative;
   width: var(--width);
   height: var(--height);
@@ -88,18 +88,19 @@ input[type="file"] {
 }
 
 .crop-container.landscape {
-  --width: 500px;
+  --width: 700px;
 }
 
 .crop-container.portrait {
-  --height: 700px;
-  --width: 500px;
+  --height: 500px;
+  --width: 400px;
 }
 
 .crop-container img {
   width: 100%;
   max-width: var(--width);
   height: auto;
+  object-fit: contain;
 }
 
 .crop-image-controls {

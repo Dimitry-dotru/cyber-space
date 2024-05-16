@@ -11,11 +11,12 @@
   height: 300px;
   border-radius: 10px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.3);
+  object-fit: cover;
 }
 .avatar {
   width: 250px;
   height: 250px;
-  border: 1px solid var(--primary-color);
+  /* border: 1px solid var(--primary-color); */
   position: absolute;
   left: 25px;
   bottom: -56px;
