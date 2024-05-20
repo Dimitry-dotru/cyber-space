@@ -40,3 +40,39 @@
   max-width: 60px;
   border-radius: 100%;
 }
+.ql-toolbar{
+  border-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1px solid var(--primary-color);
+}
+.testing-block {
+  margin-top: 25px;
+}
+.quill {
+  background-color: var(--main-color-opacity);
+  border-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.ql-container.ql-snow{
+  border: 1px solid var(--primary-color);
+}
+.ql-editor:focus{
+  background-color: var(--main-color);
+  transition: background-color 0.2s ease;
+}
+.ql-toolbar.ql-snow {
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.ql-snow .ql-stroke, .ql-formats, .ql-picker-label {
+stroke: var(--white-half);
+color: var(--white-half);
+}
+
+.ql-snow .ql-fill, .ql-stroke, .ql-snow .ql-stroke.ql-fill {
+  fill: var(--white-half);
+}
