@@ -20,6 +20,7 @@ export type nonRegUserObj = {
     public: {
       userbanner: string;
       userbgpattern: string;
+      userbgcolor: string;
     };
   };
 };

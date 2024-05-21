@@ -21,10 +21,6 @@ const Page: React.FC<any> = ({ params }: PageProps) => {
   const [steamUser, setSteamUser] = React.useState<userObj | null>(null);
   const [visitedUser, setVisitedUser] = React.useState<userObj | null>(null);
 
-  // из того что уже есть: проверка авторизации пользователя по sessionId, и работа с хедером как всегда
-  
-  // из нового: послать запрос на бек, чтобы попытаться найти юзера в бд, если такой есть, то вернеться объект с какими-то кастомными настройками, если такого нету, то 
-
   React.useEffect(() => {
     const asyncFunc = async () => {
       const user = await getUserFromDb(params.steamid);

@@ -3,6 +3,7 @@
 import React from "react";
 import Header from "@/components/Header";
 import { userObj } from "@/src/utils/types/steamTypes";
+import { authOperation } from "@/src/utils/functions/authorization";
 import { getUser } from "@/src/utils/functions/steamRequests";
 import { getSessionId } from "@/src/utils/functions/authorization";
 import Image from "next/image";
@@ -24,21 +25,8 @@ const Page = () => {
   }
 
   React.useEffect(() => {
-    const asyncFunc = async (
-      sessionID: string | null,
-      setSteamUser: (arg: userObj | null) => void
-    ) => {
-      if (!sessionID) return;
-      const data = await getUser(sessionID);
-      setSteamUser(data);
-      if (data) {
-        document.body.style.backgroundImage = `url(${data.cyberspace_settings.public.userbgpattern})`;
-      }
-      window.localStorage.setItem("sessionID", sessionID!);
-    }
-
-    const sessionID = getSessionId();
-    asyncFunc(sessionID, setSteamUser);
+    // замена ручной функции на шаблонную
+    authOperation(setSteamUser);
 
     const getAndSetSettingTab = () => {
       setSettingTab(window.location.hash.substring(1));

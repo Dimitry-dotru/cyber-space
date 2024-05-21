@@ -40,10 +40,11 @@ const authOperation = async (
   const sessionID = getSessionId();
   if (!sessionID) return;
   const data = await getUser(sessionID);
-  console.log(data);
   setSteamUser(data);
   if (data) {
     document.body.style.backgroundImage = `url(${data.cyberspace_settings.public.userbgpattern})`;
+    // добавляем градиент
+    document.querySelector("html")!.style.backgroundImage = data.cyberspace_settings.public.userbgcolor;
   }
   window.localStorage.setItem("sessionID", sessionID!);
 };
