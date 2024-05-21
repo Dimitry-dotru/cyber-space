@@ -110,3 +110,7 @@ color: var(--white-half);
 .ql-editor .ql-size-large {
   font-size: 24px;
 }
+.ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  background-color: var(--main-color);
+  color: var(--white-half);
+}
