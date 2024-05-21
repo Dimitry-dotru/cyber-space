@@ -101,3 +101,12 @@ color: var(--white-half);
 .ql-snow .ql-tooltip.ql-editing a.ql-action:hover::after {
   color: var(--white); /* Изменение цвета при ховере */
 }
+.ql-editor p{
+  font-size: 18px;
+}
+.ql-editor .ql-size-small{
+  font-size: 14px;
+}
+.ql-editor .ql-size-large {
+  font-size: 24px;
+}
