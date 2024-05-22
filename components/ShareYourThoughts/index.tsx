@@ -15,7 +15,7 @@ interface ShareYourThoughtsProps {
 const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
   const [value, setValue] = useState("");
   const [selectedImg, setSelectedImage] = useState("");
-  const [isEditorOpen, setIsEditorOpen] = useState<boolean>(true);
+  const [isEditorOpen, setIsEditorOpen] = useState<boolean>(false);
 
   const quillRef = useRef(null);
 
@@ -61,6 +61,7 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
   const handleSaveBtnClick = async () => {
     const success = await sendPost(steamUser!.steamid, value);
 
+    if (success) window.location.reload();
     // console.log(success);
   }
 

@@ -255,5 +255,8 @@
   width: 100%;
   border-top: 0;
   border-radius: 0;
-  background-color: var(--main-color);
+  background-color: var(--main-color-opacity);
+  border: 1px solid var(--primary-color);
+  border-top: 0;
+  font-weight: 600;
 }
