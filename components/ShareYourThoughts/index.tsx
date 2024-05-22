@@ -14,6 +14,19 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
   const [value, setValue] = useState("");
   const [isEditorOpen, setIsEditorOpen] = useState<boolean>(false);
 
+  const isElementEmpty = (element: any) => {
+    for (let node of element.childNodes) {
+      if (node.nodeName === "IMG") return false;
+      if (node.nodeType === Node.TEXT_NODE && node.nodeValue.trim() !== '') {
+        return false;
+      }
+      if (node.nodeType === Node.ELEMENT_NODE && !isElementEmpty(node)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const quillRef = useRef(null);
 
   useEffect(() => {
@@ -42,7 +55,7 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
   if (!isEditorOpen) return <div className="posts-container">
     <div className="input-logo-container">
       <img src={steamUser ? steamUser.avatarmedium : userLogo.src} className="profile-picture" />
-      <input onFocus={(e) => setIsEditorOpen(true)} disabled={!steamUser} type="text" id="searchInput" placeholder={steamUser ? "Share Your Thoughts..." : "You can't share your thoughts yet!"} />
+      <input onFocus={() => setIsEditorOpen(true)} disabled={!steamUser} type="text" id="searchInput" placeholder={steamUser ? "Share Your Thoughts..." : "You can't share your thoughts yet!"} />
     </div>
     <span className="material-symbols-outlined">edit</span>
   </div>
@@ -67,6 +80,13 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
         setIsEditorOpen(false);
         setValue("");
       }}></button>
+      {(function() {
+        // проверяем были ли введены какие-то символы
+        const div = document.createElement("div");
+        div.innerHTML = value;
+
+        return !isElementEmpty(div);
+      })() && <button className="send-btn">Send</button>}
     </div>
   );
 }
