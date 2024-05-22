@@ -19,7 +19,7 @@
   outline: none;
   color: var(--primary-color);
   font-size: 18px;
-  transition: .3s;
+  transition: 0.3s;
   padding: 15px 0;
 }
 
@@ -40,7 +40,7 @@
   max-width: 60px;
   border-radius: 100%;
 }
-.ql-toolbar{
+.ql-toolbar {
   border-radius: 10px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
@@ -50,15 +50,15 @@
   margin-top: 10px;
 }
 .quill {
-  background-color: var(--main-color-opacity);
+  margin-bottom: 10px;
   border-radius: 10px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-.ql-container.ql-snow{
+.ql-container.ql-snow {
   border: 1px solid var(--primary-color);
 }
-.ql-editor:focus{
+.ql-editor:focus {
   background-color: var(--main-color);
   transition: background-color 0.2s ease;
 }
@@ -67,20 +67,26 @@
   border-radius: 10px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  background-color: var(--main-color-opacity);
+  padding: 10px 25px;
 }
-.ql-snow .ql-stroke, .ql-formats, .ql-picker-label {
-stroke: var(--white-half);
-color: var(--white-half);
+.ql-snow .ql-stroke,
+.ql-formats,
+.ql-picker-label {
+  stroke: var(--white-half);
+  color: var(--white-half);
 }
 
-.ql-snow .ql-fill, .ql-stroke, .ql-snow .ql-stroke.ql-fill {
+.ql-snow .ql-fill,
+.ql-stroke,
+.ql-snow .ql-stroke.ql-fill {
   fill: var(--white-half);
   stroke: none;
-  color: none
+  color: none;
 }
 
-.ql-snow .ql-editor img{
-    max-width: 700px;
+.ql-snow .ql-editor img {
+  max-width: 700px;
 }
 .ql-snow .ql-tooltip {
   background-color: var(--main-color);
@@ -89,8 +95,8 @@ color: var(--white-half);
   padding: 5px 12px;
   white-space: nowrap;
 }
-.ql-snow .ql-tooltip[data-mode=link]::before {
-  color:  var(--white-half);
+.ql-snow .ql-tooltip[data-mode="link"]::before {
+  color: var(--white-half);
 }
 .ql-snow .ql-tooltip {
   box-shadow: 0px 0px 5px #000;
@@ -99,12 +105,26 @@ color: var(--white-half);
   color: var(--white-half);
 }
 .ql-snow .ql-tooltip.ql-editing a.ql-action:hover::after {
-  color: var(--white); /* Изменение цвета при ховере */
+  color: var(--white);
 }
-.ql-editor p{
+
+.ql-editor.ql-blank::before {
+  color: var(--white-half);
+  font-family: "Inter";
+  top: 50%;
+  transform: translateY(-50%);
+  left: 25px;
+}
+
+.ql-editor {
+  background-color: var(--main-color-opacity);
+  padding: 10px 25px;
+}
+
+.ql-editor p {
   font-size: 18px;
 }
-.ql-editor .ql-size-small{
+.ql-editor .ql-size-small {
   font-size: 14px;
 }
 .ql-editor .ql-size-large {
@@ -113,4 +133,45 @@ color: var(--white-half);
 .ql-snow .ql-picker.ql-expanded .ql-picker-options {
   background-color: var(--main-color);
   color: var(--white-half);
+}
+
+.text-editor-container {
+  position: relative;
+}
+
+.text-editor-container .close-btn {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-editor-container .close-btn::before,
+.text-editor-container .close-btn::after {
+  content: "";
+  position: absolute;
+  /* top: 50%; */
+  /* left: 50%; */
+  /* transform: translate(-50%, -50%); */
+  background-color: var(--white-half);
+  border-radius: 2px;
+
+  --length: calc(100% * 1.41421356237);
+  --stroke-width: 2px;
+}
+
+.text-editor-container .close-btn::before {
+  height: var(--length);
+  width: var(--stroke-width);
+  rotate: 45deg;
+}
+
+.text-editor-container .close-btn::after {
+  width: var(--length);
+  height: var(--stroke-width);
+  rotate: -135deg;
 }
