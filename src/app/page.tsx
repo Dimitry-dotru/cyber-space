@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import FriendsList from "@/components/FriendsList";
 import GamesList from "@/components/GamesList";
 import UserBanner from "@/components/UserBanner";
+import UserPostsFeed from "@/components/UserPostsFeed";
 import ShareYourThoughts from "@/components/ShareYourThoughts";
 
 
@@ -21,11 +22,17 @@ export default function Home() {
   return (
     <>
       <Header steamUser={steamUser} setSteamUser={setSteamUser} />
-      <UserBanner avatar={steamUser ? steamUser.avatarfull : null} userbanner={steamUser ? steamUser.cyberspace_settings.public.userbanner : null}  />
+      <UserBanner avatar={steamUser ? steamUser.avatarfull : null} userbanner={steamUser ? steamUser.cyberspace_settings.public.userbanner : null} />
       <main>
         <div className="container">
           <ShareYourThoughts steamUser={steamUser} />
-          <div className="testing-block ">
+          <div className="user-posts-container">
+            {steamUser &&
+              <UserPostsFeed steamUser={steamUser} />
+            }
+
+            {!steamUser && <h3>Authorize and see your own posts!</h3>}
+
           </div>
 
         </div>

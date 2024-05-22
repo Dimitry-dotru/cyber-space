@@ -155,7 +155,7 @@ a {
   /* height: 150%; */
 }
 
-.testing-block {
+.user-posts-container {
   /* width: calc(100% - 100px); */
   padding: 25px;
   margin: 0 auto;
@@ -163,14 +163,20 @@ a {
   border-radius: 10px;
   min-height: calc(100dvh - 100px);
   border: 1px solid var(--primary-color);
-  font-size: 36px;
+  font-size: 28px;
   gap: 50px;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   /* justify-content: center; */
   flex-direction: column;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.user-posts-container h4 {
+  font-size: 36px;
+  font-weight: 400;
+  
 }
 
 .lists {

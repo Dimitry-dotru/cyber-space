@@ -5,6 +5,8 @@ import "react-quill/dist/quill.snow.css";
 import "./style.css";
 
 import userLogo from "@/public/img/default-imgs/non_authorised_user.png";
+import { sendPost } from "@/src/utils/functions/postsRequests";
+import Button from "../Button";
 
 interface ShareYourThoughtsProps {
   steamUser: userObj | null;
@@ -12,7 +14,17 @@ interface ShareYourThoughtsProps {
 
 const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
   const [value, setValue] = useState("");
-  const [isEditorOpen, setIsEditorOpen] = useState<boolean>(false);
+  const [selectedImg, setSelectedImage] = useState("");
+  const [isEditorOpen, setIsEditorOpen] = useState<boolean>(true);
+
+  const quillRef = useRef(null);
+
+  useEffect(() => {
+    if (quillRef.current && isEditorOpen) {
+      const editor = (quillRef.current as any).getEditor();
+      editor.focus();
+    }
+  }, [isEditorOpen]);
 
   const isElementEmpty = (element: any) => {
     for (let node of element.childNodes) {
@@ -27,29 +39,29 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
     return true;
   };
 
-  const quillRef = useRef(null);
-
-  useEffect(() => {
-    if (quillRef.current && isEditorOpen) {
-      const editor = (quillRef.current as any).getEditor();
-      editor.focus();
-    }
-  }, [isEditorOpen]);
-
-
   const modules = {
     toolbar: {
       container: [
-        [{ "header": "1" }, { "header": "2" }],
-        [{ size: ["small", "normal", "large"] }],
+        [{ "header": "1" }],
+        // [{ size: ["small", "normal", "large"] }],
         ["bold", "italic", "underline", "strike", "blockquote"],
         [{ "list": "ordered" }, { "list": "bullet" },
         { "indent": "-1" }, { "indent": "+1" }],
-        ["link", "image"],
+        ["link"],
         [{ 'align': [] }],
         ["clean"]
       ],
+      handlers: {
+        // 'image': handleImageUpload,
+      },
     }
+  }
+
+  //! отобразить лоадер, после получения ответа скрыть
+  const handleSaveBtnClick = async () => {
+    const success = await sendPost(steamUser!.steamid, value);
+
+    // console.log(success);
   }
 
   if (!isEditorOpen) return <div className="posts-container">
@@ -62,32 +74,64 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
 
 
   return (
-    <div className="text-editor-container">
-      <ReactQuill
-        ref={quillRef}
-        value={value}
-        onChange={setValue}
-        modules={modules}
-        placeholder="Start typing here..."
-        formats={[
-          "header", "font", "size",
-          "bold", "italic", "underline", "strike", "blockquote",
-          "list", "bullet", "indent",
-          "link", "image", "align"
-        ]}
-      />
-      <button className="close-btn" onClick={() => {
-        setIsEditorOpen(false);
-        setValue("");
-      }}></button>
-      {(function() {
+    <>
+      <div className="text-editor-container">
+        <div style={{
+          position: "relative",
+          width: "100%",
+          flexShrink: "1"
+        }}>
+          <ReactQuill
+            ref={quillRef}
+            value={value}
+            onChange={setValue}
+            modules={modules}
+            placeholder="Start typing here..."
+            formats={[
+              "header", "font", //"size",
+              "bold", "italic", "underline", "strike", "blockquote",
+              "list", "bullet", "indent",
+              "link", "align"
+            ]}
+          />
+          <button className="close-btn" onClick={() => {
+            setIsEditorOpen(false);
+            setSelectedImage("");
+            setValue("");
+          }}></button>
+
+        </div>
+        <input type="file" accept="images/*" id="post-select" onChange={(e) => {
+          if (!e.target.files) return;
+
+          const file = e.target.files[0];
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setSelectedImage(reader.result as string);
+          };
+          reader.readAsDataURL(file);
+
+        }} />
+        <label className="post-select-label" htmlFor="post-select">
+          {selectedImg && <>
+            <div className="hover-title">Click to change picture</div>
+            <img src={selectedImg} alt="uploaded image" />
+          </>}
+          {!selectedImg && "Image select"}
+        </label>
+      </div>
+
+      {(function () {
         // проверяем были ли введены какие-то символы
         const div = document.createElement("div");
         div.innerHTML = value;
 
         return !isElementEmpty(div);
-      })() && <button className="send-btn">Send</button>}
-    </div>
+      })() && <div className="text-editor-buttons-container">
+
+          <Button onClick={handleSaveBtnClick} secondary>Send</Button>
+        </div>}
+    </>
   );
 }
 
