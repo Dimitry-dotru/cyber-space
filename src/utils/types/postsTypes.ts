@@ -3,9 +3,10 @@ export type postObj = {
   personaname: string;
   postcreated: string;
   postbody: string;
-  likes: number;
+  likes: likeObj[];
   comments: number;
   postid: string;
+  postimages: string[];
 };
 
 export type commentObj = {

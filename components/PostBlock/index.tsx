@@ -1,14 +1,30 @@
-import { postObj } from "@/src/utils/types/postsTypes";
+import { likeObj, postObj } from "@/src/utils/types/postsTypes";
 import "./style.css";
+import { useEffect, useRef, useState } from "react";
+import { userObj } from "@/src/utils/types/steamTypes";
 
 interface PostBlockProp {
   post: postObj;
   useravatar: string;
+  steamUserViewer: userObj;
 }
 
+
 const PostBlock: React.FC<PostBlockProp> = ({
-  post, useravatar
+  post, useravatar, steamUserViewer
 }) => {
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+
+  const checkIsLikePutted = () => {
+    for (let i = 0; i < post.likes.length; i++) if (post.likes[i].steamid === steamUserViewer.steamid) {
+      setIsLiked(true);
+      return;
+    }
+  }
+
+  const handleLikeClick = () => {
+    // sending like, and getting returns
+  }
 
   return <div className="posts-list-element">
     <div className="posts-list-element-heading">
@@ -18,19 +34,19 @@ const PostBlock: React.FC<PostBlockProp> = ({
       </h3>
       <p className="time-posted">{(function () {
         const dateCreated = new Date(+post.postcreated);
-        const dateNow = new Date();
 
+        const day = String(dateCreated.getDate()).padStart(2, '0');
+        const month = String(dateCreated.getMonth() + 1).padStart(2, '0');
+        const year = dateCreated.getFullYear();
 
-
-        return <></>;
+        return `${day}.${month}.${year}`;
       })()}</p>
     </div>
-    <div className="posts-list-element-body ql-editor" dangerouslySetInnerHTML={{ __html: post.postbody }}>
-    </div>
+    <PostBlockBody post={post} />
     <div className="posts-list-element-actions">
-      <button>
-        <span className="material-symbols-outlined filled">thumb_up</span>
-        {post.likes}
+      <button onClick={handleLikeClick}>
+        <span className={`material-symbols-outlined ${isLiked ? "filled" : ""}`}>thumb_up</span>
+        {post.likes.length}
       </button>
       <button>
         <span className="material-symbols-outlined">chat_bubble</span>
@@ -42,6 +58,48 @@ const PostBlock: React.FC<PostBlockProp> = ({
     </div>
 
   </div>;
+}
+
+interface PostBlockBodyProps {
+  post: postObj;
+}
+
+const PostBlockBody: React.FC<PostBlockBodyProps> = ({
+  post
+}) => {
+  const [isShownDownWardButton, setIsShownDownWardButton] = useState<boolean>(false);
+  const [isShowFullBody, setIsShowFullBody] = useState<boolean>(false);
+
+  const handleMount = (element: HTMLDivElement | null) => {
+    if (!element) return;
+
+    const { clientHeight, scrollHeight } = element;
+    console.log(scrollHeight, clientHeight);
+    if (scrollHeight > clientHeight) setIsShownDownWardButton(true);
+  }
+
+  useEffect(() => {
+    // проверяем нужна ли кнопка раскрытия контента
+    // console.log(e.currentTarget.clientHeight, e.currentTarget.scrollHeight);
+  }, []);
+
+  return <>
+    {isShownDownWardButton && <button onClick={() => {
+      setIsShowFullBody(!isShowFullBody);
+    }} className={`material-symbols-outlined arrow-downward`}
+      style={{
+        transform: `rotate(${isShowFullBody ? "180" : "0"}deg)`,
+      }}
+    >arrow_downward</button>}
+    <div ref={handleMount} className={`posts-list-element-body ql-editor ${isShowFullBody ? "open" : ""}`}>
+      <div className="posts-list-element-body-content" dangerouslySetInnerHTML={{ __html: post.postbody }}></div>
+
+      {!!post.postimages.length && <div className="img-gallery">
+        <img src={post.postimages[0]} alt="Image" />
+      </div>}
+
+    </div>
+  </>
 }
 
 export default PostBlock;

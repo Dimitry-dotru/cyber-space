@@ -1,6 +1,7 @@
 import { getAllPosts } from "@/src/utils/functions/postsRequests";
 import { userObj } from "@/src/utils/types/steamTypes";
 import { postObj } from "@/src/utils/types/postsTypes";
+import { v4 as uuid4 } from "uuid";
 
 import React, { useEffect, useState } from "react";
 
@@ -8,7 +9,10 @@ import PostBlock from "../PostBlock";
 
 import "./style.css";
 
-const UserPostsFeed: React.FC<{ steamUser: userObj; otherUserPage?: boolean; }> = ({ 
+// steamUserViewer - тот кто смотрит эти посты
+// steamUser - тот, кому принадлежат эти посты
+const UserPostsFeed: React.FC<{ steamUser: userObj; otherUserPage?: boolean; steamUserViewer: userObj }> = ({
+  steamUserViewer,
   steamUser,
   otherUserPage = false
 }) => {
@@ -35,8 +39,7 @@ const UserPostsFeed: React.FC<{ steamUser: userObj; otherUserPage?: boolean; }> 
     {userPosts && <>
       {userPosts.length && <div className="posts-list">
         {userPosts.map((el) => {
-
-          return <PostBlock useravatar={steamUser.avatarmedium} post={el} />;
+          return <PostBlock steamUserViewer={steamUserViewer} key={uuid4()} useravatar={steamUser.avatarmedium} post={el} />;
         })}
       </div>}
 

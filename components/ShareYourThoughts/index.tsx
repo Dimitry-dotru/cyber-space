@@ -14,7 +14,7 @@ interface ShareYourThoughtsProps {
 
 const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
   const [value, setValue] = useState("");
-  const [selectedImg, setSelectedImage] = useState("");
+  const [selectedImgs, setSelectedImages] = useState<string[] | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState<boolean>(false);
 
   const quillRef = useRef(null);
@@ -59,7 +59,7 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
 
   //! отобразить лоадер, после получения ответа скрыть
   const handleSaveBtnClick = async () => {
-    const success = await sendPost(steamUser!.steamid, value);
+    const success = await sendPost(steamUser!.steamid, value, selectedImgs);
 
     if (success) window.location.reload();
     // console.log(success);
@@ -97,7 +97,7 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
           />
           <button className="close-btn" onClick={() => {
             setIsEditorOpen(false);
-            setSelectedImage("");
+            setSelectedImages(null);
             setValue("");
           }}></button>
 
@@ -108,17 +108,22 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
           const file = e.target.files[0];
           const reader = new FileReader();
           reader.onloadend = () => {
-            setSelectedImage(reader.result as string);
+            setSelectedImages((prevVal) => {
+              if (!prevVal)
+                return [reader.result as string];
+
+              return [...prevVal, reader.result as string];
+            });
           };
           reader.readAsDataURL(file);
 
         }} />
         <label className="post-select-label" htmlFor="post-select">
-          {selectedImg && <>
+          {selectedImgs && selectedImgs.length && <>
             <div className="hover-title">Click to change picture</div>
-            <img src={selectedImg} alt="uploaded image" />
+            <img src={selectedImgs[0]} alt="uploaded image" />
           </>}
-          {!selectedImg && "Image select"}
+          {!selectedImgs && "Image select"}
         </label>
       </div>
 

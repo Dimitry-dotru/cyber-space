@@ -28,7 +28,7 @@ export default function Home() {
           <ShareYourThoughts steamUser={steamUser} />
           <div className="user-posts-container">
             {steamUser &&
-              <UserPostsFeed steamUser={steamUser} />
+              <UserPostsFeed steamUserViewer={steamUser} steamUser={steamUser} />
             }
 
             {!steamUser && <h3>Authorize and see your own posts!</h3>}

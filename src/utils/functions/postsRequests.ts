@@ -13,13 +13,13 @@ const getAllPosts = async (steamid: string) => {
 };
 
 // returns true or false, depends on success of post creation
-const sendPost = async (steamid: string, postContent: string) => {
+const sendPost = async (steamid: string, postContent: string, images: string[] | null) => {
   const data = await fetch(`${process.env.backendAddress}/posts/${steamid}`, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ postContent: postContent }),
+    body: JSON.stringify({ postContent: postContent, postImages: images }),
   });
 
   if (!data.ok) console.error(data.text);
