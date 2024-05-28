@@ -1,6 +1,6 @@
 import { likeObj, postObj } from "@/src/utils/types/postsTypes";
 import "./style.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { userObj } from "@/src/utils/types/steamTypes";
 
 interface PostBlockProp {
@@ -13,17 +13,42 @@ interface PostBlockProp {
 const PostBlock: React.FC<PostBlockProp> = ({
   post, useravatar, steamUserViewer
 }) => {
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [likes, setLikes] = useState<likeObj[]>(post.likes);
 
   const checkIsLikePutted = () => {
-    for (let i = 0; i < post.likes.length; i++) if (post.likes[i].steamid === steamUserViewer.steamid) {
-      setIsLiked(true);
-      return;
-    }
+    for (let i = 0; i < likes.length; i++) if (likes[i].steamid === steamUserViewer.steamid) 
+      return true;
+    return false
   }
 
-  const handleLikeClick = () => {
+  const handleLikeClick = async () => {
     // sending like, and getting returns
+    const sessionID = global.window.localStorage.getItem("sessionID");
+
+    if (!sessionID) {
+      console.log("No session id");
+      return;
+    }
+
+    const likedPersonObj = {
+      steamid: steamUserViewer.steamid,
+      personaname: steamUserViewer.personaname,
+      likedat: new Date()
+    }
+    const data = await fetch(`${process.env.backendAddress}/posts/like/${post.postid}?sessionID=${sessionID}`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(likedPersonObj)
+    });
+    if (!data.ok) {
+      console.log(data);
+      return;
+    }
+
+    const likes = (await data.json() as likeObj[]);
+    setLikes(likes);
   }
 
   return <div className="posts-list-element">
@@ -45,8 +70,8 @@ const PostBlock: React.FC<PostBlockProp> = ({
     <PostBlockBody post={post} />
     <div className="posts-list-element-actions">
       <button onClick={handleLikeClick}>
-        <span className={`material-symbols-outlined ${isLiked ? "filled" : ""}`}>thumb_up</span>
-        {post.likes.length}
+        <span className={`material-symbols-outlined ${checkIsLikePutted() ? "filled" : ""}`}>thumb_up</span>
+        {likes.length}
       </button>
       <button>
         <span className="material-symbols-outlined">chat_bubble</span>
@@ -74,8 +99,6 @@ const PostBlockBody: React.FC<PostBlockBodyProps> = ({
     if (!element) return;
 
     const { clientHeight, scrollHeight } = element;
-    console.log(element);
-    console.log(scrollHeight, clientHeight);
     if (scrollHeight > clientHeight) setIsShownDownWardButton(true);
   }
 

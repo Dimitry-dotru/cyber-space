@@ -34,6 +34,7 @@
 
 .posts-list-element-heading img {
   width: 34px;
+  border-radius: 5px;
 }
 
 .posts-list-element-heading .time-posted {

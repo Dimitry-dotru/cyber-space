@@ -22,6 +22,7 @@ const UserPostsFeed: React.FC<{ steamUser: userObj; otherUserPage?: boolean; ste
     const postsFunc = async () => {
       const posts = await getAllPosts(steamUser.steamid);
 
+      posts!.sort((a, b) => +b.postcreated - +a.postcreated);
       setUserPosts(posts);
     };
 
