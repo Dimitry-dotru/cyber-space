@@ -74,6 +74,7 @@ const PostBlockBody: React.FC<PostBlockBodyProps> = ({
     if (!element) return;
 
     const { clientHeight, scrollHeight } = element;
+    console.log(element);
     console.log(scrollHeight, clientHeight);
     if (scrollHeight > clientHeight) setIsShownDownWardButton(true);
   }

@@ -5,3 +5,13 @@
   gap: 25px;
   flex-wrap: wrap;
 }
+
+@media screen and (max-width: 1500px) {
+  .posts-list {
+    flex-direction: column;
+  }
+
+  .posts-list .posts-list-element {
+    width: 100%;
+  }
+}

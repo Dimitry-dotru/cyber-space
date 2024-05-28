@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
 import React from "react";
 import Header from "@/components/Header";
 import { userObj } from "@/src/utils/types/steamTypes";
 import { getUser } from "@/src/utils/functions/steamRequests";
-import { getSessionId } from "@/src/utils/functions/authorization";
+import { authOperation, getSessionId } from "@/src/utils/functions/authorization";
 import Image from "next/image";
 import Tab from "@/components/Tab";
 import Button from "@/components/Button";
@@ -16,7 +16,7 @@ import "./style.css";
 
 const Page = () => {
   const [steamUser, setSteamUser] = React.useState<userObj | null>(null);
-  const [settingTab, setSettingTab] = React.useState<string>(window.location.hash.substring(1));
+  const [settingTab, setSettingTab] = React.useState<string>("");
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,30 +24,18 @@ const Page = () => {
   }
 
   React.useEffect(() => {
-    const asyncFunc = async (
-      sessionID: string | null,
-      setSteamUser: (arg: userObj | null) => void
-    ) => {
-      if (!sessionID) return;
-      const data = await getUser(sessionID);
-      setSteamUser(data);
-      if (data) {
-        document.body.style.backgroundImage = `url(${data.cyberspace_settings.public.userbgpattern})`;
-      }
-      window.localStorage.setItem("sessionID", sessionID!);
+    if (!steamUser) {
+      authOperation(setSteamUser);
     }
-
-    const sessionID = getSessionId();
-    asyncFunc(sessionID, setSteamUser);
-
     const getAndSetSettingTab = () => {
-      setSettingTab(window.location.hash.substring(1));
+      setSettingTab(global.window.location.hash.substring(1));
     }
 
-    window.addEventListener("hashchange", getAndSetSettingTab)
+    setSettingTab(global.window.location.hash.substring(1));
+    global.window.addEventListener("hashchange", getAndSetSettingTab);
 
     return () => {
-      window.removeEventListener("hashchange", getAndSetSettingTab);
+      global.window.removeEventListener("hashchange", getAndSetSettingTab);
     }
   }, []);
 
@@ -65,7 +53,7 @@ const Page = () => {
               <div className="change-avatar-container">
                 <p className="input-title">Change avatar</p>
                 <AvatarInput steamUser={steamUser} />
-                <form className="user-data-form" onSubmit={submitHandler} onReset={() => window.location.reload()}>
+                <form className="user-data-form" onSubmit={submitHandler} onReset={() => global.window.location.reload()}>
                 </form>
               </div>
             </Tab>
@@ -73,26 +61,30 @@ const Page = () => {
               Still in develop :)
             </Tab>
           </>}
+
+          {!steamUser && <h2>Authorise to visit this page :)</h2>}
         </div>
       </div>
-      <div className="buttons-container">
-        <Button onClick={() => {
-          const allFormToSave = document.querySelectorAll(".user-data-form") as NodeListOf<HTMLFormElement>;
-          if (!allFormToSave.length) return;
+      {steamUser &&
+        <div className="buttons-container">
+          <Button onClick={() => {
+            const allFormToSave = global.document.querySelectorAll(".user-data-form") as NodeListOf<HTMLFormElement>;
+            if (!allFormToSave.length) return;
 
-          allFormToSave.forEach(el => el.reset());
-        }} secondary>
-          Discard
-        </Button>
-        <Button onClick={() => {
-          const allFormToSave = document.querySelectorAll(".user-data-form") as NodeListOf<HTMLFormElement>;
-          if (!allFormToSave.length) return;
+            allFormToSave.forEach(el => el.reset());
+          }} secondary>
+            Discard
+          </Button>
+          <Button onClick={() => {
+            const allFormToSave = global.document.querySelectorAll(".user-data-form") as NodeListOf<HTMLFormElement>;
+            if (!allFormToSave.length) return;
 
-          allFormToSave.forEach(el => el.requestSubmit());
-        }} primary>
-          Save
-        </Button>
-      </div>
+            allFormToSave.forEach(el => el.requestSubmit());
+          }} primary>
+            Save
+          </Button>
+        </div>
+      }
     </main>
   </>;
 };
@@ -139,11 +131,11 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
 
   const getCroppedImg = (imageSrc: string | undefined, crop: Area | undefined): Promise<string> => {
     return new Promise((resolve, reject) => {
-      const image = new window.Image();
+      const image = new global.window.Image();
       if (!imageSrc || !crop) return;
       image.src = imageSrc;
       image.onload = () => {
-        const canvas = document.createElement('canvas');
+        const canvas = global.document.createElement('canvas');
         const scaleX = image.naturalWidth / image.width;
         const scaleY = image.naturalHeight / image.height;
         canvas.width = crop.width;
@@ -182,7 +174,7 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
       const file = e.target.files[0];
       const imageUrl = URL.createObjectURL(file);
 
-      const img = new window.Image();
+      const img = new global.window.Image();
       img.onload = () => {
         const { width, height } = img;
 
@@ -208,7 +200,7 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
 
     const res = await getCroppedImg(imgLink, cropedPixelParams);
 
-    fetch(`${process.env.backendAddress}/change-avatar/${steamUser!.steamid}?sessionID=${getSessionId() }`, {
+    fetch(`${process.env.backendAddress}/change-avatar/${steamUser!.steamid}?sessionID=${getSessionId()}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -216,7 +208,7 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
       body: JSON.stringify({ image: res.replace(/^data:image\/\w+;base64,/, "") })
     }).then(d => {
       if (d.ok) {
-        window.location.reload();
+        global.window.location.reload();
       }
       else {
         console.error(`Status: ${d.status}\nMessage:${d.statusText}`);
@@ -264,9 +256,9 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
             <input onChange={handleFileChange} accept="image/*" type="file" style={{ display: "none" }} id="avatar-change" />
           </label>
           <Button primary outlined onClick={() => {
-              fetch(`${process.env.backendAddress}/restore-avatar/${steamUser!.steamid}?sessionID=${getSessionId()}`, { method: "post" })
+            fetch(`${process.env.backendAddress}/restore-avatar/${steamUser!.steamid}?sessionID=${getSessionId()}`, { method: "post" })
               .then(d => {
-                if (d.ok) window.location.reload();
+                if (d.ok) global.window.location.reload();
               })
           }}>Return steam avatar</Button>
           {imgLink &&

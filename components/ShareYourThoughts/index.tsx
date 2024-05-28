@@ -1,3 +1,5 @@
+"use client"
+
 import { userObj } from "@/src/utils/types/steamTypes";
 import { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
@@ -129,7 +131,7 @@ const ShareYourThoughts: React.FC<ShareYourThoughtsProps> = ({ steamUser }) => {
 
       {(function () {
         // проверяем были ли введены какие-то символы
-        const div = document.createElement("div");
+        const div = global.document.createElement("div");
         div.innerHTML = value;
 
         return !isElementEmpty(div);
