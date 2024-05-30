@@ -3,7 +3,7 @@ import {
   achievementsForGame,
   countendAchievementsProps,
   gameObj,
-  nonRegUserObj,
+  friendObj,
 } from "../types/steamTypes";
 
 const getUser = async (sessionID: string) => {
@@ -24,7 +24,7 @@ const getUserFromDb = async (steamid: number) => {
     return null;
   }
 
-  const user: userObj = await data.json();
+  const user: userObj = (await data.json()).user;
 
   return user;
 };
@@ -47,7 +47,11 @@ const getUsers = (
     });
 };
 
-const getAchievementsInfo = async (steamid: string, game: gameObj, hiddenAchievements: boolean) => {
+const getAchievementsInfo = async (
+  steamid: string,
+  game: gameObj,
+  hiddenAchievements: boolean
+) => {
   const gameAchivementsInfo: countendAchievementsProps = {
     totalAchievements: 0,
     completed: 0,
@@ -56,8 +60,7 @@ const getAchievementsInfo = async (steamid: string, game: gameObj, hiddenAchieve
     hasAchievements: !!game.has_community_visible_stats,
   };
 
-  if (!gameAchivementsInfo.hasAchievements || hiddenAchievements)
-    return null;
+  if (!gameAchivementsInfo.hasAchievements || hiddenAchievements) return null;
 
   const data = await fetch(
     `${process.env.backendAddress}/steam/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${game.appid}&key=${process.env.apiKey}&steamid=${steamid}`
@@ -91,4 +94,51 @@ const getAchievementsInfo = async (steamid: string, game: gameObj, hiddenAchieve
   return gameAchivementsInfo;
 };
 
-export { getUser, getUsers, getAchievementsInfo, getUserFromDb };
+const getFriendsList = async (
+  steamid: string,
+  setFriendList: (arg: undefined | null | friendObj[]) => void
+) => {
+  const backendAddress = process.env.backendAddress;
+  const sessionID = global.window.localStorage.getItem("sessionID");
+
+  if (!sessionID) {
+    console.error("Error with session id");
+    return;
+  }
+
+  const jsonRequest = await fetch(
+    `${backendAddress}/user/friends/${steamid}?sessionID=${sessionID}`
+  );
+
+  if (!jsonRequest.ok) {
+    console.log(jsonRequest);
+    return;
+  }
+
+  const friends = await jsonRequest.json() as friendObj[];
+
+
+  // sort by alphabet...
+  friends.sort((a, b) => {
+    const nameA = a.personaname.toUpperCase();
+    const nameB = b.personaname.toUpperCase();
+
+    if (nameA > nameB) {
+      return -1;
+    }
+    if (nameA < nameB) {
+      return 1;
+    }
+    return 0;
+  });
+
+  setFriendList(friends);
+};
+
+export {
+  getUser,
+  getUsers,
+  getAchievementsInfo,
+  getUserFromDb,
+  getFriendsList,
+};

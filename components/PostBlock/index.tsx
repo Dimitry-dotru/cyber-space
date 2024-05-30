@@ -2,6 +2,7 @@ import { likeObj, postObj } from "@/src/utils/types/postsTypes";
 import "./style.css";
 import { useEffect, useState } from "react";
 import { userObj } from "@/src/utils/types/steamTypes";
+import { sendLike, deletePost } from "@/src/utils/functions/postsRequests";
 
 interface PostBlockProp {
   post: postObj;
@@ -16,39 +17,17 @@ const PostBlock: React.FC<PostBlockProp> = ({
   const [likes, setLikes] = useState<likeObj[]>(post.likes);
 
   const checkIsLikePutted = () => {
-    for (let i = 0; i < likes.length; i++) if (likes[i].steamid === steamUserViewer.steamid) 
+    for (let i = 0; i < likes.length; i++) if (likes[i].steamid === steamUserViewer.steamid)
       return true;
     return false
   }
 
-  const handleLikeClick = async () => {
-    // sending like, and getting returns
-    const sessionID = global.window.localStorage.getItem("sessionID");
+  const handleLikeClick = () => {
+    sendLike(steamUserViewer, setLikes, post);
+  }
 
-    if (!sessionID) {
-      console.log("No session id");
-      return;
-    }
-
-    const likedPersonObj = {
-      steamid: steamUserViewer.steamid,
-      personaname: steamUserViewer.personaname,
-      likedat: new Date()
-    }
-    const data = await fetch(`${process.env.backendAddress}/posts/like/${post.postid}?sessionID=${sessionID}`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(likedPersonObj)
-    });
-    if (!data.ok) {
-      console.log(data);
-      return;
-    }
-
-    const likes = (await data.json() as likeObj[]);
-    setLikes(likes);
+  const handleDeleteClick = () => {
+    deletePost(post.postid);
   }
 
   return <div className="posts-list-element">
@@ -73,13 +52,18 @@ const PostBlock: React.FC<PostBlockProp> = ({
         <span className={`material-symbols-outlined ${checkIsLikePutted() ? "filled" : ""}`}>thumb_up</span>
         {likes.length}
       </button>
-      <button>
+      {/* <button>
         <span className="material-symbols-outlined">chat_bubble</span>
         {post.comments}
-      </button>
-      <button>
+      </button> */}
+      {/* <button>
         <span className="material-symbols-outlined">more_horiz</span>
-      </button>
+      </button> */}
+      {post.steamid === steamUserViewer.steamid &&
+        <button onClick={handleDeleteClick}>
+          <span className="material-symbols-outlined">delete</span>
+        </button>
+      }
     </div>
 
   </div>;

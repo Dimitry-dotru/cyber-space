@@ -38,7 +38,7 @@ const UserPostsFeed: React.FC<{ steamUser: userObj; otherUserPage?: boolean; ste
     </div>
 
     {userPosts && <>
-      {userPosts.length && <div className="posts-list">
+      {userPosts.length !== 0 && <div className="posts-list">
         {userPosts.map((el) => {
           return <PostBlock steamUserViewer={steamUserViewer} key={uuid4()} useravatar={steamUser.avatarmedium} post={el} />;
         })}

@@ -3,9 +3,7 @@
 import React from "react";
 import Header from "@/components/Header";
 import { userObj } from "@/src/utils/types/steamTypes";
-import { getUser } from "@/src/utils/functions/steamRequests";
 import { authOperation, getSessionId } from "@/src/utils/functions/authorization";
-import Image from "next/image";
 import Tab from "@/components/Tab";
 import Button from "@/components/Button";
 import Cropper from 'react-easy-crop'
@@ -17,11 +15,6 @@ import "./style.css";
 const Page = () => {
   const [steamUser, setSteamUser] = React.useState<userObj | null>(null);
   const [settingTab, setSettingTab] = React.useState<string>("");
-
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Submited!");
-  }
 
   React.useEffect(() => {
     if (!steamUser) {
@@ -50,12 +43,7 @@ const Page = () => {
         <div className="settings-body">
           {steamUser && <>
             <Tab title="User profile" openedTab={settingTab} uniqueName="user-profile">
-              <div className="change-avatar-container">
-                <p className="input-title">Change avatar</p>
-                <AvatarInput steamUser={steamUser} />
-                <form className="user-data-form" onSubmit={submitHandler} onReset={() => global.window.location.reload()}>
-                </form>
-              </div>
+              <UserProfileSetting steamUser={steamUser} />
             </Tab>
             <Tab title="Theme settings" openedTab={settingTab} uniqueName="theme">
               Still in develop :)
@@ -88,6 +76,43 @@ const Page = () => {
     </main>
   </>;
 };
+
+interface UserProfileSettingProps {
+  steamUser: userObj;
+}
+
+const UserProfileSetting: React.FC<UserProfileSettingProps> = ({
+  steamUser
+}) => {
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Submited!");
+  }
+
+  return <>
+    <div className="change-avatar-container">
+      <p className="input-title">Change avatar</p>
+      <AvatarInput steamUser={steamUser} />
+      <form className="user-data-form" onSubmit={submitHandler} onReset={() => global.window.location.reload()}>
+      </form>
+    </div>
+
+    <div className="user-info-container">
+      <div className="labeled-input-container">
+        <label htmlFor="personaname">Change user name</label>
+        <input defaultValue={steamUser.personaname} id="personaname" type="text" maxLength={20} placeholder="Enter your new name here..." name="personaname" />
+      </div>
+      <div className="checkbox-input-container">
+        <input defaultValue={steamUser.personaname} id="achievements-visibility" type="checkbox" name="achievements-visibility" />
+        <label htmlFor="achievements-visibility">Show my achievements</label>
+      </div>
+      <div className="checkbox-input-container">
+        <input defaultValue={steamUser.personaname} id="timeplayed-visibility" type="checkbox" name="personaname" />
+        <label htmlFor="timeplayed-visibility">Show my time played</label>
+      </div>
+    </div>
+  </>
+}
 
 interface AvatarInputProps {
   steamUser: userObj | null;

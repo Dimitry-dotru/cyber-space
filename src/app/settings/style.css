@@ -43,7 +43,7 @@ input[type="file"] {
 
 .input-title {
   margin-bottom: 10px;
-  font-size: 18px;
+  font-size: 24px;
   transition: 0.3s;
 }
 
@@ -119,4 +119,58 @@ input[type="file"] {
   width: 32px;
   height: 32px;
   padding: 0;
+}
+
+.tab-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 35px;
+}
+
+.user-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.checkbox-input-container {
+  font-size: 24px;
+  display: flex;
+}
+
+.checkbox-input-container input {
+  display: none;
+}
+
+.checkbox-input-container label {
+  flex-direction: row-reverse;
+  position: relative;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  user-select: none;
+}
+
+.checkbox-input-container label::before {
+  content: "✓";
+  display: block;
+  position: absolute;
+  left: 7px;
+  top: -3px;
+
+  opacity: 0;
+}
+
+.checkbox-input-container label::after {
+  content: "";
+  display: block;
+  width: 25px;
+  height: 25px;
+  background-color: transparent;
+  border: 3px solid var(--primary-color);
+  border-radius: 5px;
+}
+
+.checkbox-input-container input:checked + label::before {
+  opacity: 1;
 }

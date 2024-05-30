@@ -7,56 +7,16 @@ import { v4 as uuid4 } from "uuid";
 import "./style.css";
 
 import { friendObj, userObj } from "@/src/utils/types/steamTypes";
+import { getFriendsList } from "@/src/utils/functions/steamRequests";
 
-const apiKey = process.env.apiKey;
 const backendAddress = process.env.backendAddress;
 
 interface FriendsListProps {
   steamUser: userObj | null;
 }
 
-async function getFriendsList(steamid: string, setFriendList: (arg: undefined | null | userObj[]) => void) {
-  const data = await fetch(`${backendAddress}/steam/ISteamUser/GetFriendList/v0001/?key=${apiKey}&steamid=${steamid}&relationship=friend`);
-
-  const responseObj = await (data.json());
-  if (!responseObj.friendslist) {
-    setFriendList(undefined);
-    return;
-  }
-  const friendList = responseObj.friendslist.friends as friendObj[];
-  const pairsAmnt = Math.ceil(friendList.length / 100);
-  const allUsers: userObj[] = [];
-
-  for (let i = 0; i < pairsAmnt; i++) {
-    const steamids = friendList.slice(i * 100, (i * 100) + 100).map((el) => el.steamid);
-
-    const data = await fetch(`${backendAddress}/steam/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamids.join(",")}`);
-
-    const usersArray = (await data.json()).response.players as userObj[];
-    usersArray.forEach(el => {
-      allUsers.push(el);
-    })
-  }
-
-  // sort by alphabet...
-  allUsers.sort((a, b) => {
-    const nameA = a.personaname.toUpperCase();
-    const nameB = b.personaname.toUpperCase();
-
-    if (nameA > nameB) {
-      return -1;
-    }
-    if (nameA < nameB) {
-      return 1;
-    }
-    return 0;
-  });
-
-  setFriendList(allUsers);
-}
-
 const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
-  const [friendList, setFriendList] = React.useState<userObj[] | null| undefined>(null);
+  const [friendList, setFriendList] = React.useState<friendObj[] | null| undefined>(null);
   const [showMoreFriends, setShowMoreFriends] = React.useState<boolean>(false);
   const router = useRouter();
 
@@ -90,7 +50,8 @@ const FriendsList: React.FC<FriendsListProps> = ({ steamUser }) => {
             <>
               {friendList.map(el => {
                 return <div onClick={() => {
-                  router.push(`/user/${el.steamid}`);
+                  if (el.registered)
+                    router.push(`/user/${el.steamid}`);
                 }} title={el.personaname} key={uuid4()} className="friend-list-box-container">
                   <div
                     style={{

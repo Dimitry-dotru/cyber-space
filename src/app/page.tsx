@@ -22,11 +22,14 @@ export default function Home() {
   return (
     <>
       <Header steamUser={steamUser} setSteamUser={setSteamUser} />
-      <UserBanner avatar={steamUser ? steamUser.avatarfull : null} userbanner={steamUser ? steamUser.cyberspace_settings.public.userbanner : null} />
+      <UserBanner personaname={steamUser ? steamUser.personaname : null} avatar={steamUser ? steamUser.avatarfull : null} userbanner={steamUser ? steamUser.cyberspace_settings.public.userbanner : null} />
       <main>
         <div className="container">
           <ShareYourThoughts steamUser={steamUser} />
-          <div className="user-posts-container">
+          <div style={{
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+          }} className="user-posts-container">
             {steamUser &&
               <UserPostsFeed steamUserViewer={steamUser} steamUser={steamUser} />
             }

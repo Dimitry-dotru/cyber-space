@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({
         <Input />
       </div>
       <div className="container-navigate">
-        <div className="navigate">
+        {/* <div className="navigate">
           <span className="material-symbols-outlined">feed</span>
           <a href="/news">News</a>
         </div>
@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({
           <a href="/">
             Profile
           </a>
-        </div>
+        </div> */}
         <UserProfile steamUser={steamUser} setSteamUser={setSteamUser} />
       </div>
     </header>

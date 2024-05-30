@@ -59,8 +59,8 @@
 
 .posts-list-element .arrow-downward {
   position: absolute;
-  bottom: 45px;
-  right: 25px;
+  bottom: 12.5px;
+  left: 25px;
   cursor: pointer;
   user-select: none;
   z-index: 2;

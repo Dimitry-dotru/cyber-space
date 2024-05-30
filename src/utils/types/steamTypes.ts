@@ -34,6 +34,10 @@ export type friendObj = {
   friend_since: number;
   relationship: string;
   steamid: string;
+  registered: boolean;
+  avatarfull: string;
+  avatarmedium: string;
+  personaname: string;
 };
 
 // if in params exists this param: include_appinfo=true
