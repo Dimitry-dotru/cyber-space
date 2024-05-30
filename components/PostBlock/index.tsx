@@ -8,11 +8,13 @@ interface PostBlockProp {
   post: postObj;
   useravatar: string;
   steamUserViewer: userObj;
+  userPosts: null | postObj[];
+  setUserPosts: (e: postObj[] | null) => void;
 }
 
 
 const PostBlock: React.FC<PostBlockProp> = ({
-  post, useravatar, steamUserViewer
+  post, useravatar, steamUserViewer, userPosts, setUserPosts
 }) => {
   const [likes, setLikes] = useState<likeObj[]>(post.likes);
 
@@ -22,8 +24,18 @@ const PostBlock: React.FC<PostBlockProp> = ({
     return false
   }
 
-  const handleLikeClick = () => {
-    sendLike(steamUserViewer, setLikes, post);
+  const handleLikeClick = async () => {
+    const like = await sendLike(steamUserViewer, post);
+    if (like && userPosts) {
+      const index = userPosts.findIndex((el) => el.postid === post.postid);
+
+      if (index === -1) return;
+      
+      const temp = [...userPosts];
+      temp[index].likes = like;
+
+      setUserPosts([...temp]);
+    }
   }
 
   const handleDeleteClick = () => {

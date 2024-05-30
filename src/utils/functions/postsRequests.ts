@@ -28,13 +28,13 @@ const sendPost = async (steamid: string, postContent: string, images: string[] |
   return data.ok;
 };
 
-const sendLike = async (steamUserViewer: userObj, setLikes: (e: likeObj[]) => void, post: postObj) => {
+const sendLike = async (steamUserViewer: userObj, post: postObj) => {
   // sending like, and getting returns
     const sessionID = global.window.localStorage.getItem("sessionID");
 
     if (!sessionID) {
       console.log("No session id");
-      return;
+      return null;
     }
 
     const likedPersonObj = {
@@ -51,11 +51,12 @@ const sendLike = async (steamUserViewer: userObj, setLikes: (e: likeObj[]) => vo
     });
     if (!data.ok) {
       console.log(data);
-      return;
+      return null;
     }
 
     const likes = (await data.json() as likeObj[]);
-    setLikes(likes);
+
+    return likes;
 }
 
 const deletePost = async (postid: string) => {
