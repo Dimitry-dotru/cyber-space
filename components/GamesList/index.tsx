@@ -14,7 +14,16 @@ interface GamesListProps {
 const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
   const [showMoreGames, setShowMoreGames] = React.useState(false);
   const [gamesList, setGamesList] = React.useState<null | gameObj[] | undefined>(null);
-  const [gamesElements, setGamesElements] = React.useState<React.ReactNode[]>([]);
+  const [gamesElements, setGamesElements] = React.useState<{
+    name: string;
+    element: React.ReactNode;
+  }[]>([]);
+  const [displayedGamesElements, setDisplayedGamesElements] = React.useState<{
+    name: string;
+    element: React.ReactNode;
+  }[]>([]);
+  const [searchVal, setSearchVal] = React.useState<string>("");
+
 
   React.useEffect(() => {
     if (!steamUser) {
@@ -54,19 +63,43 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
                 isHiddenAchievements = true;
               }
             }
-            gamesElements.push(<GameElement hiddenAchievements={isHiddenAchievements} key={uuid4()} steamid={steamUser.steamid} gameListEl={el} />);
+            gamesElements.push({
+              name: el.name,
+              element: <GameElement hiddenAchievements={isHiddenAchievements} key={uuid4()} steamid={steamUser.steamid} gameListEl={el} />
+            });
             setGamesElements([...gamesElements]);
+            setDisplayedGamesElements([...gamesElements]);
           });
         }
         setGamesList(gamesArr);
       });
   }, [steamUser]);
 
+  React.useEffect(() => {
+    if (!gamesList) return;
+
+    if (searchVal.trim() === "") {
+      setDisplayedGamesElements(gamesElements);
+      return;
+    }
+
+    setDisplayedGamesElements(gamesElements.filter((el) => el.name.toLowerCase().includes(searchVal.trim().toLowerCase())));
+  }, [searchVal]);
+
+  const searchHandle = (val: string) => {
+    if (val.length >= 3) setSearchVal(val);
+    else if (val.length <= 1) setSearchVal("");
+  }
+
   return <div className="games-list-container">
     <h3>
       <span className="material-symbols-outlined">sports_esports</span>
       Games {gamesList && gamesList.length && <>({gamesList.length})</>}
     </h3>
+
+    {gamesList && gamesList.length !== 0 &&
+      <input onChange={(e) => searchHandle(e.currentTarget.value)} className="list-searching-input" type="text" placeholder="Search..." />
+    }
 
     <div className={`games-list ${showMoreGames ? "open" : ""}`}>
       {/* если не авторизован, то вывести сообщение чтобы авторизовался */}
@@ -76,7 +109,7 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
       {/* если авторизован, но пока нету данных о играх, отобразить загрузку */}
       {!gamesList && steamUser && gamesList !== undefined && <span style={{ alignSelf: "flex-start" }}>Loading...</span>}
       {/* и когда игры были получены, выводим их */}
-      {gamesElements}
+      {displayedGamesElements.map(el => el.element)}
       {/* {gamesList && <>
           {!gamesList.length && "You haven’t games yet..."}
           {gamesList.length &&
@@ -87,7 +120,7 @@ const GamesList: React.FC<GamesListProps> = ({ steamUser }) => {
         </>} */}
       {/* </>} */}
     </div>
-    {gamesList && gamesList.length > 12 && <div
+    {gamesList && gamesList.length > 12 && displayedGamesElements.length > 12 && <div
       onClick={(e) => {
         if (showMoreGames) {
           const gamesListDiv = (e.target as HTMLDivElement).previousElementSibling;

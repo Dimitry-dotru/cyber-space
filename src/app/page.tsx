@@ -33,11 +33,8 @@ export default function Home() {
             {steamUser &&
               <UserPostsFeed steamUserViewer={steamUser} steamUser={steamUser} />
             }
-
             {!steamUser && <h3>Authorize and see your own posts!</h3>}
-
           </div>
-
         </div>
 
 

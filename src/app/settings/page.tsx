@@ -100,7 +100,7 @@ const UserProfileSetting: React.FC<UserProfileSettingProps> = ({
     <div className="user-info-container">
       <div className="labeled-input-container">
         <label htmlFor="personaname">Change user name</label>
-        <input defaultValue={steamUser.personaname} id="personaname" type="text" maxLength={20} placeholder="Enter your new name here..." name="personaname" />
+        <input defaultValue={steamUser.personaname} id="personaname" type="text" maxLength={18} placeholder="Enter your new name here..." name="personaname" />
       </div>
       <div className="checkbox-input-container">
         <input defaultValue={steamUser.personaname} id="achievements-visibility" type="checkbox" name="achievements-visibility" />
