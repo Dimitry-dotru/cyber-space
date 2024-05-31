@@ -4,7 +4,7 @@ import Image from "next/image";
 import logo from "../../public/img/logo.png";
 
 import UserProfile from "@/components/UserProfile";
-import Input from "../Input";
+import SearchInput from "../SearchInput";
 
 import { userObj } from "@/src/utils/types/steamTypes";
 
@@ -22,7 +22,9 @@ const Header: React.FC<HeaderProps> = ({
         <a href="/">
           <Image src={logo} alt="Logo" />
         </a>
-        <Input />
+        {steamUser &&
+          <SearchInput steamid={steamUser.steamid} />
+        }
       </div>
       <div className="container-navigate">
         {/* <div className="navigate">

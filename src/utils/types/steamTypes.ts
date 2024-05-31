@@ -26,7 +26,7 @@ export type nonRegUserObj = {
 
 export type userObj = nonRegUserObj & {
   cyberspace_settings: {
-    private: {}
+    private: {};
   };
 };
 
@@ -36,6 +36,12 @@ export type friendObj = {
   steamid: string;
   registered: boolean;
   avatarfull: string;
+  avatarmedium: string;
+  personaname: string;
+};
+
+export type searchedUserObj = {
+  steamid: string;
   avatarmedium: string;
   personaname: string;
 };
