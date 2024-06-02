@@ -26,6 +26,11 @@
   --body-bg-image: none;
 }
 
+
+*::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
 /* * {
   scrollbar-width:thin;
   scrollbar-color: var(--grey) transparent;
@@ -68,7 +73,7 @@ html {
 
 body {
   min-height: 100dvh;
-  background-size: 60%;
+  background-size: 30%;
   background-repeat: repeat;
   background-attachment: fixed;
 }

@@ -9,6 +9,7 @@ import Button from "@/components/Button";
 import Cropper from 'react-easy-crop'
 import { Point, Area } from "react-easy-crop";
 import { useState, useEffect } from "react";
+import { v4 as uuid4 } from "uuid";
 
 import "./style.css";
 
@@ -46,33 +47,13 @@ const Page = () => {
               <UserProfileSetting steamUser={steamUser} />
             </Tab>
             <Tab title="Theme settings" openedTab={settingTab} uniqueName="theme">
-              Still in develop :)
+              <ThemeSettings steamid={steamUser.steamid} />
             </Tab>
           </>}
 
           {!steamUser && <h2>Authorise to visit this page :)</h2>}
         </div>
       </div>
-      {steamUser &&
-        <div className="buttons-container">
-          <Button onClick={() => {
-            const allFormToSave = global.document.querySelectorAll(".user-data-form") as NodeListOf<HTMLFormElement>;
-            if (!allFormToSave.length) return;
-
-            allFormToSave.forEach(el => el.reset());
-          }} secondary>
-            Discard
-          </Button>
-          <Button onClick={() => {
-            const allFormToSave = global.document.querySelectorAll(".user-data-form") as NodeListOf<HTMLFormElement>;
-            if (!allFormToSave.length) return;
-
-            allFormToSave.forEach(el => el.requestSubmit());
-          }} primary>
-            Save
-          </Button>
-        </div>
-      }
     </main>
   </>;
 };
@@ -84,9 +65,39 @@ interface UserProfileSettingProps {
 const UserProfileSetting: React.FC<UserProfileSettingProps> = ({
   steamUser
 }) => {
+  const [changeNameState, setChangeNameState] = useState<"success" | "sending" | "error" | null>(null);
+  const [enteredName, setEnteredName] = useState<string>(steamUser.personaname);
+
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Submited!");
+  }
+
+  const changeName = async () => {
+    if (enteredName === steamUser.personaname) return;
+    const sessionID = global.window.localStorage.getItem("sessionID");
+
+    if (!sessionID) return;
+    setChangeNameState("sending");
+
+    const data = await fetch(`${process.env.backendAddress}/username/${enteredName}?sessionID=${sessionID}`, {method: "post"});
+
+    setTimeout(() => {
+      if (!data.ok) {
+        setChangeNameState("error");
+        setTimeout(() => setChangeNameState(null), 1000);
+        console.error(data);
+        return;
+      }
+  
+      setChangeNameState("success");
+      
+      setTimeout(() => {
+        setChangeNameState(null);
+      }, 2000);
+    }, 1000);
+
+    
   }
 
   return <>
@@ -99,20 +110,85 @@ const UserProfileSetting: React.FC<UserProfileSettingProps> = ({
 
     <div className="user-info-container">
       <div className="labeled-input-container">
-        <label htmlFor="personaname">Change user name</label>
-        <input defaultValue={steamUser.personaname} id="personaname" type="text" maxLength={18} placeholder="Enter your new name here..." name="personaname" />
+        <label htmlFor="personaname">User name</label>
+        <input defaultValue={steamUser.personaname} id="personaname" type="text" maxLength={18} onChange={(e) => setEnteredName(e.currentTarget.value)} placeholder="Enter your new name here..." name="personaname" />
+        <Button onClick={changeName}>
+          {!changeNameState && "Save"}
+          {changeNameState === "sending" && "Saving..."}
+          {changeNameState === "error" && "Error with saving..."}
+          {changeNameState === "success" && "Saved!"}
+        </Button>
       </div>
-      <div className="checkbox-input-container">
+      {/* <div className="checkbox-input-container">
         <input defaultValue={steamUser.personaname} id="achievements-visibility" type="checkbox" name="achievements-visibility" />
         <label htmlFor="achievements-visibility">Show my achievements</label>
       </div>
       <div className="checkbox-input-container">
         <input defaultValue={steamUser.personaname} id="timeplayed-visibility" type="checkbox" name="personaname" />
         <label htmlFor="timeplayed-visibility">Show my time played</label>
-      </div>
+      </div> */}
     </div>
   </>
 }
+
+const ThemeSettings: React.FC<{ steamid: string }> = ({ steamid }) => {
+  const [selectedBgPattern, setSelectedPattern] = useState<string>("");
+  const [patternsList, setPatternsList] = useState([]);
+
+  const changeBgPicture = async (src: string) => {
+    if (selectedBgPattern === src) return;
+
+    const sessionID = global.window.localStorage.getItem("sessionID");
+
+    if (!sessionID) return;
+
+    const data = await fetch(`${process.env.backendAddress}/bg-patterns/?url=${src}&sessionID=${sessionID}`, {method: "post"});
+
+    if (!data.ok) {
+      console.error("Can't set image", data);
+      return;
+    }
+    const body = document.querySelector("body");
+    if (body) {
+      setSelectedPattern(src);
+      body.style.backgroundImage = `url(${src})`;
+    }
+  };
+
+  const getPatternsList = async () => {
+    const data = await fetch(`${process.env.backendAddress}/bg-patterns`);
+
+    if (!data.ok) {
+      console.log(data);
+      return;
+    }
+
+    const list = await data.json();
+    setPatternsList(list);
+  }
+
+  useEffect(() => {
+    getPatternsList();
+    const url = global.document.body.style.backgroundImage;
+    const urlMatch = url.match(/url\("([^"]+)"\)/);
+
+    setSelectedPattern(urlMatch![1]);
+  }, []);
+
+  return <>
+    <div className="bg-patterns-container">
+      <h3>Choose your background image pattern</h3>
+      <div className="bg-patterns-list">
+        {!patternsList && "Loading..."}
+        {patternsList && patternsList.length === 0 && "No pictures available :("}
+        {patternsList && patternsList.length !== 0 && patternsList.map((el) => {
+          return <img className={`${selectedBgPattern === el ? "selected" : ""}`} key={uuid4()} onClick={() => changeBgPicture(el)} src={el} alt="Bg pattern" />;
+        })}
+      </div>
+    </div>
+
+  </>;
+};
 
 interface AvatarInputProps {
   steamUser: userObj | null;

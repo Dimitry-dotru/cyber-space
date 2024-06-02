@@ -174,3 +174,38 @@ input[type="file"] {
 .checkbox-input-container input:checked + label::before {
   opacity: 1;
 }
+
+.bg-patterns-container {
+  width: 100%;
+}
+
+.bg-patterns-container h3 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.bg-patterns-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 10px;
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  width: 100%;
+}
+
+.bg-patterns-list img {
+  max-width: 150px;
+  height: auto;
+  filter: brightness(2) contrast(2);
+  background-color: rgba(255, 255, 255, 0.177);
+}
+
+.bg-patterns-list img.selected {
+  border: 2px solid var(--primary-color);
+}
+
+.labeled-input-container .btn {
+  max-width: none;
+  width: 100%;
+}
