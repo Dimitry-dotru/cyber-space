@@ -58,11 +58,7 @@ const Page = () => {
   </>;
 };
 
-interface UserProfileSettingProps {
-  steamUser: userObj;
-}
-
-const UserProfileSetting: React.FC<UserProfileSettingProps> = ({
+const UserProfileSetting: React.FC<{ steamUser: userObj; }> = ({
   steamUser
 }) => {
   const [changeNameState, setChangeNameState] = useState<"success" | "sending" | "error" | null>(null);
@@ -80,7 +76,7 @@ const UserProfileSetting: React.FC<UserProfileSettingProps> = ({
     if (!sessionID) return;
     setChangeNameState("sending");
 
-    const data = await fetch(`${process.env.backendAddress}/username/${enteredName}?sessionID=${sessionID}`, {method: "post"});
+    const data = await fetch(`${process.env.backendAddress}/username/${enteredName}?sessionID=${sessionID}`, { method: "post" });
 
     setTimeout(() => {
       if (!data.ok) {
@@ -89,15 +85,15 @@ const UserProfileSetting: React.FC<UserProfileSettingProps> = ({
         console.error(data);
         return;
       }
-  
+
       setChangeNameState("success");
-      
+
       setTimeout(() => {
         setChangeNameState(null);
       }, 2000);
     }, 1000);
 
-    
+
   }
 
   return <>
@@ -142,7 +138,7 @@ const ThemeSettings: React.FC<{ steamid: string }> = ({ steamid }) => {
 
     if (!sessionID) return;
 
-    const data = await fetch(`${process.env.backendAddress}/bg-patterns/?url=${src}&sessionID=${sessionID}`, {method: "post"});
+    const data = await fetch(`${process.env.backendAddress}/bg-patterns/?url=${src}&sessionID=${sessionID}`, { method: "post" });
 
     if (!data.ok) {
       console.error("Can't set image", data);
@@ -186,15 +182,15 @@ const ThemeSettings: React.FC<{ steamid: string }> = ({ steamid }) => {
         })}
       </div>
     </div>
+    <div className="d-flex direction-column gap-5">
+      <h3>Change banner image</h3>
+      <BannerInput />
+    </div>
 
   </>;
 };
 
-interface AvatarInputProps {
-  steamUser: userObj | null;
-}
-
-const AvatarInput: React.FC<AvatarInputProps> = ({
+const AvatarInput: React.FC<{ steamUser: userObj | null; }> = ({
   steamUser
 }) => {
   const zoomStep = .2;
@@ -362,6 +358,174 @@ const AvatarInput: React.FC<AvatarInputProps> = ({
                 if (d.ok) global.window.location.reload();
               })
           }}>Return steam avatar</Button>
+          {imgLink &&
+            <Button disabled={!imgLink} type="submit" primary outlined>Save</Button>
+          }
+        </div>
+      </div>
+    </form>
+  )
+}
+
+const BannerInput: React.FC = ({ }) => {
+  const zoomStep = .2;
+
+  const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [imgLink, setImgLink] = useState<string | null>(null);
+  // const [sendingImg]
+  const [showGrid, setShowGrid] = useState<boolean>(false);
+
+  const [cropedPixelParams, setCropedPixelParams] = useState<Area>();
+
+  const changeZoom = (operator: "+" | "-") => {
+    const increaseZoom = () => {
+      console.log(zoom);
+      if (zoom + zoomStep > 3) setZoom(3);
+      else setZoom(zoom + zoomStep);
+    }
+
+    const decreaseZoom = () => {
+      if (zoom - zoomStep < 1) setZoom(1);
+      else setZoom(zoom - zoomStep);
+    }
+
+    switch (operator) {
+      case "+": increaseZoom(); break;
+      case "-": decreaseZoom(); break;
+    }
+  }
+
+  const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
+    setCropedPixelParams(croppedAreaPixels);
+  }
+
+  const getCroppedImg = (imageSrc: string | undefined, crop: Area | undefined): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const image = new global.window.Image();
+      if (!imageSrc || !crop) return;
+      image.src = imageSrc;
+      image.onload = () => {
+        const canvas = global.document.createElement('canvas');
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        canvas.width = crop.width;
+        canvas.height = crop.height;
+        const ctx = canvas.getContext('2d');
+
+        if (ctx) {
+          ctx.drawImage(
+            image,
+            crop.x * scaleX,
+            crop.y * scaleY,
+            crop.width * scaleX,
+            crop.height * scaleY,
+            0,
+            0,
+            crop.width,
+            crop.height
+          );
+          canvas.toBlob(blob => {
+            const reader = new FileReader();
+            if (blob) reader.readAsDataURL(blob);
+            reader.onloadend = () => {
+              resolve(reader.result as string);
+            };
+          }, 'image/webp');
+        } else {
+          reject(new Error('Не удалось получить контекст canvas'));
+        }
+      };
+      image.onerror = error => reject(error);
+    });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      const imageUrl = URL.createObjectURL(file);
+
+      const img = new global.window.Image();
+      img.onload = () => {
+        const { width, height } = img;
+
+        if (width <= height) {
+          return;
+        }
+
+
+      };
+      img.src = imageUrl;
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImgLink(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      // setImgLink(imageUrl);
+    }
+  };
+
+  const submitHandler = async (e: any) => {
+    if (!imgLink) return;
+    e.preventDefault();
+
+    const res = await getCroppedImg(imgLink, cropedPixelParams);
+
+    fetch(`${process.env.backendAddress}/change-avatar/`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ image: res.replace(/^data:image\/\w+;base64,/, "") })
+    }).then(d => {
+      if (d.ok) {
+        global.window.location.reload();
+      }
+      else {
+        console.error(`Status: ${d.status}\nMessage:${d.statusText}`);
+      }
+    })
+  }
+
+  return (
+    <form onSubmit={submitHandler}>
+      <div className={`crop-container banner-crop-container ${!imgLink && "inactive"}`}>
+        {!imgLink &&
+          <label htmlFor="banner-change">Change banner picture...</label>
+        }
+        {imgLink &&
+          <Cropper
+            image={imgLink}
+            crop={crop}
+            zoom={zoom}
+            aspect={16 / 9}
+            onCropChange={setCrop}
+            onCropComplete={onCropComplete}
+            onZoomChange={setZoom}
+            cropShape="rect"
+            showGrid={showGrid}
+          />
+        }
+      </div>
+      <div className="crop-image-controls">
+        {imgLink &&
+          <div className="justify-between w-max">
+            <div className="d-flex gap-5 items-center">
+              <input onChange={(e) => setShowGrid(e.target.checked)} type="checkbox" id="toggle-grid-show-1" />
+              <label htmlFor="toggle-grid-show-1">Show grid</label>
+            </div>
+            <div className="zoom-btns">
+              <Button disabled={!imgLink} secondary onClick={() => changeZoom("+")}>+</Button>
+              <Button disabled={!imgLink} secondary onClick={() => changeZoom("-")}>-</Button>
+            </div>
+          </div>
+        }
+        <div className="d-flex gap-5 justify-between">
+          <label className="btn btn-secondary btn-outlined" htmlFor="avatar-change">
+            Change picture
+            <input onChange={handleFileChange} accept="image/*" type="file" style={{ display: "none" }} id="banner-change" />
+          </label>
           {imgLink &&
             <Button disabled={!imgLink} type="submit" primary outlined>Save</Button>
           }

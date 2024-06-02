@@ -1,5 +1,5 @@
 form {
-  width: 100%;
+  /* width: 100%; */
 }
 
 input[type="file"] {
@@ -208,4 +208,9 @@ input[type="file"] {
 .labeled-input-container .btn {
   max-width: none;
   width: 100%;
+}
+
+.banner-crop-container.crop-container {
+  --height: 500px;
+  --width: 800px;
 }
