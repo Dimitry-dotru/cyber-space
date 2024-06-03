@@ -184,7 +184,7 @@ const ThemeSettings: React.FC<{ steamid: string }> = ({ steamid }) => {
     </div>
     <div className="d-flex direction-column gap-5">
       <h3>Change banner image</h3>
-      <BannerInput />
+      <BannerInput steamid={steamid} />
     </div>
 
   </>;
@@ -367,13 +367,12 @@ const AvatarInput: React.FC<{ steamUser: userObj | null; }> = ({
   )
 }
 
-const BannerInput: React.FC = ({ }) => {
+const BannerInput: React.FC<{steamid: string}> = ({ steamid }) => {
   const zoomStep = .2;
 
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [imgLink, setImgLink] = useState<string | null>(null);
-  // const [sendingImg]
   const [showGrid, setShowGrid] = useState<boolean>(false);
 
   const [cropedPixelParams, setCropedPixelParams] = useState<Area>();
@@ -449,11 +448,6 @@ const BannerInput: React.FC = ({ }) => {
       img.onload = () => {
         const { width, height } = img;
 
-        if (width <= height) {
-          return;
-        }
-
-
       };
       img.src = imageUrl;
 
@@ -462,31 +456,54 @@ const BannerInput: React.FC = ({ }) => {
         setImgLink(reader.result as string);
       };
       reader.readAsDataURL(file);
-      // setImgLink(imageUrl);
     }
   };
 
-  const submitHandler = async (e: any) => {
-    if (!imgLink) return;
+  // const submitHandler = async (e: any) => {
+  //   if (!imgLink) return;
+  //   e.preventDefault();
+
+  //   const res = await getCroppedImg(imgLink, cropedPixelParams);
+
+  //   fetch(`${process.env.backendAddress}/change-avatar/`, {
+  //     method: "POST",
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({ image: res.replace(/^data:image\/\w+;base64,/, "") })
+  //   }).then(d => {
+  //     if (d.ok) {
+  //       global.window.location.reload();
+  //     }
+  //     else {
+  //       console.error(`Status: ${d.status}\nMessage:${d.statusText}`);
+  //     }
+  //   })
+  // }
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!imgLink || !cropedPixelParams) return;
 
-    const res = await getCroppedImg(imgLink, cropedPixelParams);
+    const croppedImgLink = await getCroppedImg(imgLink, cropedPixelParams);
+    const image = await fetch(croppedImgLink).then((res) => res.blob());
+    const formData = new FormData();
+    formData.append("image", image, `${steamid}-user_profile_banner_image.webp`);
+    formData.append("steamid", steamid);
 
-    fetch(`${process.env.backendAddress}/change-avatar/`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ image: res.replace(/^data:image\/\w+;base64,/, "") })
-    }).then(d => {
-      if (d.ok) {
-        global.window.location.reload();
-      }
-      else {
-        console.error(`Status: ${d.status}\nMessage:${d.statusText}`);
-      }
+    fetch(`${process.env.backendAddress}/change-banner?sessionID=${getSessionId()}`, {
+      method: 'POST',
+      body: formData,
     })
-  }
+      .then((response) => {
+        if (response.ok) {
+          global.window.location.reload();
+        } else {
+          console.error(`Status: ${response.status}\nMessage:${response.statusText}`);
+        }
+      })
+      .catch((error) => console.error('Error:', error));
+  };
 
   return (
     <form onSubmit={submitHandler}>
@@ -499,6 +516,7 @@ const BannerInput: React.FC = ({ }) => {
             image={imgLink}
             crop={crop}
             zoom={zoom}
+            
             aspect={16 / 9}
             onCropChange={setCrop}
             onCropComplete={onCropComplete}
@@ -522,7 +540,7 @@ const BannerInput: React.FC = ({ }) => {
           </div>
         }
         <div className="d-flex gap-5 justify-between">
-          <label className="btn btn-secondary btn-outlined" htmlFor="avatar-change">
+          <label className="btn btn-secondary btn-outlined" htmlFor="banner-change">
             Change picture
             <input onChange={handleFileChange} accept="image/*" type="file" style={{ display: "none" }} id="banner-change" />
           </label>
