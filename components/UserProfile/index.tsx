@@ -22,6 +22,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ setSteamUser, steamUser }) =>
     setIsOpen(!isOpen);
   }
 
+  useEffect(() => {
+    console.log(process.env.backendAddress);
+    
+  }, []);
+
   return <div className="user-profile">
     <div onClick={toggleOpen} className="user-logo-container">
       <img alt="user logo" width={60} height={60} src={steamUser ? steamUser.avatarmedium : userLogo.src} />

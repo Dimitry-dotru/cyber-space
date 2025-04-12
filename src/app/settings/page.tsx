@@ -144,7 +144,7 @@ const ThemeSettings: React.FC<{ steamid: string }> = ({ steamid }) => {
       console.error("Can't set image", data);
       return;
     }
-    const body = document.querySelector("body");
+    const body = global.document.querySelector("body");
     if (body) {
       setSelectedPattern(src);
       body.style.backgroundImage = `url(${src})`;

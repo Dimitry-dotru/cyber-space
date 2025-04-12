@@ -4,7 +4,7 @@ import { getUser } from "./steamRequests";
 const logoutHandler = (setSteamUser: (arg: userObj | null) => void) => {
   const sessionID = global.window.localStorage.getItem("sessionID");
   if (!sessionID) return;
-  fetch(`http://localhost:7069/logout/?sessionID=${sessionID}`, {
+  fetch(`${process.env.backendAddress}/logout/?sessionID=${sessionID}`, {
     method: "post",
   })
     .then((d) => {
@@ -30,7 +30,7 @@ const getSessionId = (): null | string => {
   if (!sessionID) return null;
   global.window.localStorage.setItem("sessionID", sessionID);
   const url = global.window.location.href.split("?")[0];
-  global.window.history.replaceState({}, document.title, url);
+  global.window.history.replaceState({}, global.document.title, url);
   return sessionID;
 };
 
@@ -42,7 +42,7 @@ const authOperation = async (
   const data = await getUser(sessionID);
   setSteamUser(data);
   if (data) {
-    document.body.style.backgroundImage = `url(${data.cyberspace_settings.public.userbgpattern})`;
+    global.document.body.style.backgroundImage = `url(${data.cyberspace_settings.public.userbgpattern})`;
   }
   global.window.localStorage.setItem("sessionID", sessionID!);
 };
